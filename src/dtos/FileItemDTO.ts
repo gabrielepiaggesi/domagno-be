@@ -1,6 +1,6 @@
 import { FileStatus } from "../enums/FileStatus.enum";
 
-export class FileItem {
+export class FileItemDTO {
     public id: number;
     public status: FileStatus;
     public type: string;

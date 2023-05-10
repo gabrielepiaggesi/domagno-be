@@ -1,12 +1,12 @@
 import { ServerError } from "../../utils/ServerError";
 import { FileApi } from "../apis.ts/FileApi";
-import { FileItem } from "../dtos/FileItemDTO";
+import { FileItemDTO } from "../dtos/FileItemDTO";
 import { FileStatus } from "../enums/FileStatus.enum";
 import { Assignment } from "../../utils/Assignment";
 
 export class FileService implements FileApi {
 
-    public async getFiles(assignmentId: number, token: string): Promise<FileItem[]> {
+    public async getFiles(assignmentId: number, token: string): Promise<FileItemDTO[]> {
         const phaseId = await Assignment.getPhase(assignmentId, token);
         if (phaseId != 2) throw new ServerError('LINK_PROCESSED', null, 403);
 
@@ -14,7 +14,7 @@ export class FileService implements FileApi {
         return attachments.filter(att => !att.isDeleted).map(att => this.transformObjToFileItem(att));
     }
     
-    public async uploadFile(assignmentId: number, file: any|null, token: string): Promise<FileItem> {
+    public async uploadFile(assignmentId: number, file: any|null, token: string): Promise<FileItemDTO> {
         if (!file) throw new ServerError('MISSING_FILE');
         
         const newAttachment = await Assignment.uploadAttachment(assignmentId, file, token);
@@ -29,8 +29,8 @@ export class FileService implements FileApi {
         return await Assignment.removeAttachment(assignmentId, fileId, token);
     }
 
-    private transformObjToFileItem(fileObj: any): FileItem {
-        return new FileItem(
+    private transformObjToFileItem(fileObj: any): FileItemDTO {
+        return new FileItemDTO(
             fileObj.id, 
             fileObj.isDeleted ? FileStatus.Deleted : FileStatus.Uploaded, 
             fileObj.fileType, 
