@@ -1,5 +1,5 @@
 import { ServerError } from "../../utils/ServerError";
-import { FileApi } from "../apis.ts/FileApi";
+import { FileApi } from "../apis/FileApi";
 import { FileItemDTO } from "../dtos/FileItemDTO";
 import { FileStatus } from "../enums/FileStatus.enum";
 import { Assignment } from "../../utils/Assignment";

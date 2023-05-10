@@ -1,7 +1,7 @@
 import { memoryStorage } from "multer";
 import { Delete, Get, Multer, Path, Post } from "../../utils/HttpMehtodDecorators";
 import { LOG } from "../../utils/Log";
-import { FileApi } from "../apis.ts/FileApi";
+import { FileApi } from "../apis/FileApi";
 import { FileService } from "../services/FileService";
 import {Response} from 'express';
 
