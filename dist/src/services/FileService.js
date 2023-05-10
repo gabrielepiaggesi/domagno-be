@@ -8,40 +8,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileService = void 0;
-const Axios_1 = require("../../utils/Axios");
-const form_data_1 = __importDefault(require("form-data"));
+const ServerError_1 = require("../../utils/ServerError");
+const FileItemDTO_1 = require("../dtos/FileItemDTO");
+const FileStatus_enum_1 = require("../enums/FileStatus.enum");
+const Assignment_1 = require("../../utils/Assignment");
 class FileService {
-    constructor() {
-        this.ASS_BASE_URL = 'http://whoosnapinsurancetest2.westeurope.cloudapp.azure.com:8254/api/v1/assignments/';
+    getFiles(assignmentId, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const phaseId = yield Assignment_1.Assignment.getPhase(assignmentId, token);
+            if (phaseId != 2)
+                throw new ServerError_1.ServerError('LINK_PROCESSED', null, 403);
+            const attachments = (yield Assignment_1.Assignment.getAttachments(assignmentId, token)) || [];
+            return attachments.filter(att => !att.isDeleted).map(att => this.transformObjToFileItem(att));
+        });
     }
     uploadFile(assignmentId, file, token) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!file)
-                throw new Error('Missing file');
-            const formData = new form_data_1.default();
-            formData.append("fileData", Buffer.from(file.buffer), file.originalname);
-            formData.append("Type", '0');
-            formData.append("Name", file.originalname);
-            formData.append("Description", "");
-            const uploadEndpoint = this.ASS_BASE_URL + `${assignmentId}/attachments`;
-            return yield Axios_1.Axios.post(token, uploadEndpoint, formData, 'multipart/form-data', formData.getHeaders());
+                throw new ServerError_1.ServerError('MISSING_FILE');
+            const newAttachment = yield Assignment_1.Assignment.uploadAttachment(assignmentId, file, token);
+            return this.transformObjToFileItem(newAttachment);
+        });
+    }
+    sendFiles(assignmentId, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Assignment_1.Assignment.firePerizia(assignmentId, token);
         });
     }
     deleteFile(assignmentId, fileId, token) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Axios_1.Axios.delete(token, this.ASS_BASE_URL + `${assignmentId}/attachments/${fileId}`);
+            return yield Assignment_1.Assignment.removeAttachment(assignmentId, fileId, token);
         });
     }
-    getFiles(assignmentId, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const files = yield Axios_1.Axios.get(token, this.ASS_BASE_URL + `${assignmentId}/attachments`);
-            return files;
-        });
+    transformObjToFileItem(fileObj) {
+        return new FileItemDTO_1.FileItem(fileObj.id, fileObj.isDeleted ? FileStatus_enum_1.FileStatus.Deleted : FileStatus_enum_1.FileStatus.Uploaded, fileObj.fileType, fileObj.fileName, (fileObj.fileSize || 0));
     }
 }
 exports.FileService = FileService;

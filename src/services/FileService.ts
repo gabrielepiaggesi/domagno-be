@@ -1,30 +1,46 @@
 import { Axios } from "../../utils/Axios";
+import { LOG } from "../../utils/Log";
+import { ServerError } from "../../utils/ServerError";
 import { FileApi } from "../apis.ts/FileApi";
 import FormData from 'form-data';
+import moment from 'moment';
+import { FileItem } from "../dtos/FileItemDTO";
+import { FileStatus } from "../enums/FileStatus.enum";
+import { Assignment } from "../../utils/Assignment";
 
 export class FileService implements FileApi {
-    private readonly ASSIGNMENT_URL = 'http://whoosnapinsurancetest2.westeurope.cloudapp.azure.com:8254/api/v1/assignments/';
-    
-    public async uploadFile(assignmentId: number, file: any|null, token: string) {
-        if (!file) throw new Error('Missing file');
-        
-        const formData = new FormData();
-        formData.append("fileData", Buffer.from(file.buffer), file.originalname);
-        formData.append("Type", '0');
-        formData.append("Name", file.originalname);
-        formData.append("Description", "");
 
-        const uploadEndpoint = this.ASSIGNMENT_URL + `${assignmentId}/attachments`;
-        return await Axios.post(token, uploadEndpoint, formData, 'multipart/form-data', formData.getHeaders());
+    public async getFiles(assignmentId: number, token: string): Promise<FileItem[]> {
+        const phaseId = await Assignment.getPhase(assignmentId, token);
+        if (phaseId != 2) throw new ServerError('LINK_PROCESSED', null, 403);
+
+        const attachments = await Assignment.getAttachments(assignmentId, token) || [];
+        return attachments.filter(att => !att.isDeleted).map(att => this.transformObjToFileItem(att));
+    }
+    
+    public async uploadFile(assignmentId: number, file: any|null, token: string): Promise<FileItem> {
+        if (!file) throw new ServerError('MISSING_FILE');
+        
+        const newAttachment = await Assignment.uploadAttachment(assignmentId, file, token);
+        return this.transformObjToFileItem(newAttachment);
+    }
+
+    public async sendFiles(assignmentId: number, token: string) {
+        return await Assignment.firePerizia(assignmentId, token);
     }
     
     public async deleteFile(assignmentId: number, fileId: number, token: string) {
-        return await Axios.delete(token, this.ASSIGNMENT_URL + `${assignmentId}/attachments/${fileId}`);
+        return await Assignment.removeAttachment(assignmentId, fileId, token);
     }
 
-    public async getFiles(assignmentId: number, token: string) {
-        const files = await Axios.get(token, this.ASSIGNMENT_URL + `${assignmentId}/attachments`);
-        return files;
+    private transformObjToFileItem(fileObj: any): FileItem {
+        return new FileItem(
+            fileObj.id, 
+            fileObj.isDeleted ? FileStatus.Deleted : FileStatus.Uploaded, 
+            fileObj.fileType, 
+            fileObj.fileName, 
+            (fileObj.fileSize || 0)
+        );
     }
 
 }

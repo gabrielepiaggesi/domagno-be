@@ -14,6 +14,19 @@ const multerConfig = {
 };
 
 export class FileController implements FileApi {
+
+    @Get()
+    @Path("/list/:assignmentId")
+    public async getFiles(res: Response, req) {
+        try {
+            const token = req.header('Authorization');
+            const response = await fileService.getFiles(+req.params.assignmentId, token);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'File.getFiles.Error'});
+        }
+    }
     
     @Post()
     @Multer({ multerConfig, type: 'single', path: 'file' })
@@ -25,7 +38,20 @@ export class FileController implements FileApi {
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
-            return res.status(e.status || 500).json({ ...e, message: e.message, code: e.code || 'File.uploadFile.Error'});
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'File.uploadFile.Error'});
+        }
+    }
+
+    @Post()
+    @Path("/send/:assignmentId")
+    public async sendFiles(res: Response, req) {
+        try {
+            const token = req.header('Authorization');
+            const response = await fileService.sendFiles(+req.params.assignmentId, token);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'File.sendFiles.Error'});
         }
     }
 
@@ -38,20 +64,7 @@ export class FileController implements FileApi {
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
-            return res.status(e.status || 500).json({ ...e, message: e.message, code: e.code || 'File.deleteFile.Error'});
-        }
-    }
-
-    @Get()
-    @Path("/list/:assignmentId")
-    public async getFiles(res: Response, req) {
-        try {
-            const token = req.header('Authorization');
-            const response = await fileService.getFiles(+req.params.assignmentId, token);
-            return res.status(200).json(response);
-        } catch(e) {
-            LOG.error(e);
-            return res.status(e.status || 500).json({ ...e, message: e.message, code: e.code || 'File.getFiles.Error'});
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'File.deleteFile.Error'});
         }
     }
 

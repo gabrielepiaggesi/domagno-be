@@ -28,6 +28,19 @@ const multerConfig = {
     }
 };
 class FileController {
+    getFiles(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.header('Authorization');
+                const response = yield fileService.getFiles(+req.params.assignmentId, token);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'File.getFiles.Error' }));
+            }
+        });
+    }
     uploadFile(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -37,7 +50,20 @@ class FileController {
             }
             catch (e) {
                 Log_1.LOG.error(e);
-                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message, code: e.code || 'File.uploadFile.Error' }));
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'File.uploadFile.Error' }));
+            }
+        });
+    }
+    sendFiles(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.header('Authorization');
+                const response = yield fileService.sendFiles(+req.params.assignmentId, token);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'File.sendFiles.Error' }));
             }
         });
     }
@@ -50,36 +76,27 @@ class FileController {
             }
             catch (e) {
                 Log_1.LOG.error(e);
-                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message, code: e.code || 'File.deleteFile.Error' }));
-            }
-        });
-    }
-    getFiles(res, req) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const token = req.header('Authorization');
-                const response = yield fileService.getFiles(+req.params.assignmentId, token);
-                return res.status(200).json(response);
-            }
-            catch (e) {
-                Log_1.LOG.error(e);
-                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message, code: e.code || 'File.getFiles.Error' }));
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'File.deleteFile.Error' }));
             }
         });
     }
 }
+__decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/list/:assignmentId")
+], FileController.prototype, "getFiles", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Multer)({ multerConfig, type: 'single', path: 'file' }),
     (0, HttpMehtodDecorators_1.Path)("/upload/:assignmentId")
 ], FileController.prototype, "uploadFile", null);
 __decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/send/:assignmentId")
+], FileController.prototype, "sendFiles", null);
+__decorate([
     (0, HttpMehtodDecorators_1.Delete)(),
     (0, HttpMehtodDecorators_1.Path)("/delete/:assignmentId/:fileId")
 ], FileController.prototype, "deleteFile", null);
-__decorate([
-    (0, HttpMehtodDecorators_1.Get)(),
-    (0, HttpMehtodDecorators_1.Path)("/list/:assignmentId")
-], FileController.prototype, "getFiles", null);
 exports.FileController = FileController;
 //# sourceMappingURL=FileController.js.map
