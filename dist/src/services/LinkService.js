@@ -17,11 +17,16 @@ const Link_1 = require("../models/Link");
 const LinkRepository_1 = require("../repositories/LinkRepository");
 const linkRepository = new LinkRepository_1.LinkRepository();
 class LinkService {
+    getLink(linkUUID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield linkRepository.findOneByKeyValue('uuid', linkUUID);
+        });
+    }
     saveLink(linkData) {
         return __awaiter(this, void 0, void 0, function* () {
             const equalLink = yield this.getLink(linkData.uuid);
             if (equalLink) {
-                Log_1.LOG.warn('Cannot save link, returning equal one');
+                Log_1.LOG.warn('Cannot save link, returning equal one', linkData.uuid, equalLink._id);
                 return equalLink;
             }
             const newLink = new Link_1.Link();
@@ -32,11 +37,6 @@ class LinkService {
             newLink._id = linkSaved.insertedId;
             Log_1.LOG.success('New link saved', newLink.uuid, newLink._id);
             return newLink;
-        });
-    }
-    getLink(linkUUID) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield linkRepository.findOneByKeyValue('uuid', linkUUID);
         });
     }
     changeLinkStatus(linkID, status) {
