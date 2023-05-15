@@ -33,10 +33,10 @@ export class LinkController implements LinkApi {
     }
 
     @Put()
-    @Path("/changeStatus/:linkUUID/:status")
+    @Path("/changeStatus/:linkID/:status")
     public async changeLinkStatus(res: Response, req) {
         try {
-            const response = await linkService.changeLinkStatus(req.params.linkUUID, req.params.status);
+            const response = await linkService.changeLinkStatus(req.params.linkID, req.params.status);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);

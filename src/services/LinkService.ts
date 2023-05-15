@@ -26,10 +26,9 @@ export class LinkService implements LinkApi {
         return await linkRepository.findOneByKeyValue('uuid', linkUUID);
     }
 
-    public async changeLinkStatus(linkUUID: string, status: any) {
-        LOG.info('Changing link status to', status, linkUUID);
-        const link = await linkRepository.findOneByKeyValue('uuid', linkUUID);
-        return await linkRepository.update(link._id, { ...link, status } as Link);
+    public async changeLinkStatus(linkID: string, status: any) {
+        LOG.info('Changing link status to', status, linkID);
+        return await linkRepository.updateStatus(linkID, status);
     }
 
     public async removeLink(linkUUID: string) {
