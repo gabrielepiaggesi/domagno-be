@@ -31,10 +31,9 @@ export class LinkService implements LinkApi {
         return await linkRepository.updateStatus(linkID, status);
     }
 
-    public async removeLink(linkUUID: string) {
-        LOG.info('Removing link', linkUUID);
-        const link = await linkRepository.findOneByKeyValue('uuid', linkUUID);
-        return await linkRepository.delete(link._id);
+    public async removeLink(linkID: string) {
+        LOG.info('Removing link', linkID);
+        return await linkRepository.delete(linkID);
     }
 
 }
