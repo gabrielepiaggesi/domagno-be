@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Multer = exports.Path = exports.Get = exports.Delete = exports.Post = void 0;
+exports.Multer = exports.Path = exports.Get = exports.Delete = exports.Put = exports.Post = void 0;
 require("reflect-metadata");
 function Post() {
     const decorator = (target, propertyKey, description) => {
@@ -9,6 +9,13 @@ function Post() {
     return decorator;
 }
 exports.Post = Post;
+function Put() {
+    const decorator = (target, propertyKey, description) => {
+        Reflect.defineMetadata('METHOD', 'PUT', target, propertyKey);
+    };
+    return decorator;
+}
+exports.Put = Put;
 function Delete() {
     const decorator = (target, propertyKey, description) => {
         Reflect.defineMetadata('METHOD', 'DELETE', target, propertyKey);

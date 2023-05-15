@@ -7,6 +7,13 @@ export function Post() {
     return decorator;
 }
 
+export function Put() {
+    const decorator: MethodDecorator = (target, propertyKey, description) => {
+        Reflect.defineMetadata('METHOD', 'PUT', target, propertyKey);
+    };
+    return decorator;
+}
+
 export function Delete() {
     const decorator: MethodDecorator = (target, propertyKey, description) => {
         Reflect.defineMetadata('METHOD', 'DELETE', target, propertyKey);

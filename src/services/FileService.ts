@@ -8,7 +8,7 @@ export class FileService implements FileApi {
 
     public async getFiles(assignmentId: number, token: string): Promise<FileItemDTO[]> {
         const phaseId = await Assignment.getPhase(assignmentId, token);
-        if (phaseId != 2) throw new ServerError('LINK_PROCESSED', null, 403);
+        if (phaseId != 2) throw new ServerError('WRONG_ASS_PHASE', null, 403);
 
         const attachments = await Assignment.getAttachments(assignmentId, token) || [];
         return attachments.filter(att => !att.isDeleted).map(att => this.transformObjToFileItem(att));

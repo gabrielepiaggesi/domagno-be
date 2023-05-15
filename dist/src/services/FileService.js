@@ -43,7 +43,7 @@ class FileService {
         });
     }
     transformObjToFileItem(fileObj) {
-        return new FileItemDTO_1.FileItem(fileObj.id, fileObj.isDeleted ? FileStatus_enum_1.FileStatus.Deleted : FileStatus_enum_1.FileStatus.Uploaded, fileObj.fileType, fileObj.fileName, (fileObj.fileSize || 0));
+        return new FileItemDTO_1.FileItemDTO(fileObj.id, fileObj.isDeleted ? FileStatus_enum_1.FileStatus.Deleted : FileStatus_enum_1.FileStatus.Uploaded, fileObj.fileType, fileObj.fileName, (fileObj.fileSize || 0));
     }
 }
 exports.FileService = FileService;

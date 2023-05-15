@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FileItem = void 0;
-class FileItem {
+exports.FileItemDTO = void 0;
+class FileItemDTO {
     constructor(id, status, type, name, size) {
         this.status = status;
         this.type = type;
@@ -10,5 +10,5 @@ class FileItem {
         this.id = id;
     }
 }
-exports.FileItem = FileItem;
+exports.FileItemDTO = FileItemDTO;
 //# sourceMappingURL=FileItemDTO.js.map
