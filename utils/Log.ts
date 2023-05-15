@@ -8,7 +8,7 @@ export class LOG {
     }
     public static warn = (...args) => {
         console.log('------------------');
-        console.log('\x1b[33m%s\x1b[0m', '⚠ warn');
+        console.log('\x1b[33m%s\x1b[0m', '⚠ warning');
         console.log('\x1b[33m%s\x1b[0m', ...args);
     };
     public static success = (...args) => {

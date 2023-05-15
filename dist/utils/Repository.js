@@ -20,12 +20,12 @@ class Repository {
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Db_1.db.collection(this.collection).deleteOne({ id });
+            return yield Db_1.db.collection(this.collection).deleteOne({ _id: new mongodb_1.ObjectID(id) });
         });
     }
     update(id, model) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Db_1.db.collection(this.collection).replaceOne(id, model);
+            return yield Db_1.db.collection(this.collection).updateOne({ _id: new mongodb_1.ObjectID(id) }, { $set: model });
         });
     }
     findById(id) {

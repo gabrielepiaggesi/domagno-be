@@ -19,7 +19,7 @@ class FileService {
         return __awaiter(this, void 0, void 0, function* () {
             const phaseId = yield Assignment_1.Assignment.getPhase(assignmentId, token);
             if (phaseId != 2)
-                throw new ServerError_1.ServerError('LINK_PROCESSED', null, 403);
+                throw new ServerError_1.ServerError('WRONG_ASS_PHASE', null, 403);
             const attachments = (yield Assignment_1.Assignment.getAttachments(assignmentId, token)) || [];
             return attachments.filter(att => !att.isDeleted).map(att => this.transformObjToFileItem(att));
         });

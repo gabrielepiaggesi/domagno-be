@@ -48,7 +48,7 @@ class LinkController {
     changeLinkStatus(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield linkService.changeLinkStatus(req.params.linkUUID, req.params.status);
+                const response = yield linkService.changeLinkStatus(req.params.linkID, req.params.status);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -80,7 +80,7 @@ __decorate([
 ], LinkController.prototype, "saveLink", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Put)(),
-    (0, HttpMehtodDecorators_1.Path)("/changeStatus/:linkUUID/:status")
+    (0, HttpMehtodDecorators_1.Path)("/changeStatus/:linkID/:status")
 ], LinkController.prototype, "changeLinkStatus", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Delete)(),

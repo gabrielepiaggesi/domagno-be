@@ -11,6 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkService = void 0;
 const Log_1 = require("../../utils/Log");
+const ServerError_1 = require("../../utils/ServerError");
+const LinkStatus_enum_1 = require("../enums/LinkStatus.enum");
 const Link_1 = require("../models/Link");
 const LinkRepository_1 = require("../repositories/LinkRepository");
 const linkRepository = new LinkRepository_1.LinkRepository();
@@ -18,11 +20,13 @@ class LinkService {
     saveLink(linkData) {
         return __awaiter(this, void 0, void 0, function* () {
             const equalLink = yield this.getLink(linkData.uuid);
-            if (equalLink)
+            if (equalLink) {
+                Log_1.LOG.warn('Cannot save link, returning equal one');
                 return equalLink;
+            }
             const newLink = new Link_1.Link();
             newLink.uuid = linkData.uuid;
-            newLink.status = 'active';
+            newLink.status = LinkStatus_enum_1.LinkStatus.Active;
             newLink.assignmentId = linkData.assignmentId;
             const linkSaved = yield linkRepository.save(newLink);
             newLink._id = linkSaved.insertedId;
@@ -35,18 +39,19 @@ class LinkService {
             return yield linkRepository.findOneByKeyValue('uuid', linkUUID);
         });
     }
-    changeLinkStatus(linkUUID, status) {
+    changeLinkStatus(linkID, status) {
         return __awaiter(this, void 0, void 0, function* () {
-            Log_1.LOG.info('Changing link status to', status, linkUUID);
-            const link = yield linkRepository.findOneByKeyValue('uuid', linkUUID);
-            return yield linkRepository.update(link._id, Object.assign(Object.assign({}, link), { status }));
+            Log_1.LOG.info('Changing link status to', status, linkID);
+            const newStatus = LinkStatus_enum_1.LinkStatus[status];
+            if (!newStatus)
+                throw new ServerError_1.ServerError('WRONG_LINK_STATUS');
+            return yield linkRepository.updateStatus(linkID, newStatus);
         });
     }
-    removeLink(linkUUID) {
+    removeLink(linkID) {
         return __awaiter(this, void 0, void 0, function* () {
-            Log_1.LOG.info('Removing link', linkUUID);
-            const link = yield linkRepository.findOneByKeyValue('uuid', linkUUID);
-            return yield linkRepository.delete(link._id);
+            Log_1.LOG.info('Removing link', linkID);
+            return yield linkRepository.delete(linkID);
         });
     }
 }
