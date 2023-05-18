@@ -4,11 +4,13 @@ import bodyParser from 'body-parser';
 import routes from './routes';
 import { connectToDatabase } from './utils/Db';
 import { LOG } from './utils/Log';
+import config from 'config';
 
 connectToDatabase();
 
 const app = express();
-const port = process.env.PORT || 4200;
+// const port = process.env.PORT || 4200;
+const port = config.get('PORT');
 
 app.use(cors());
 app.use(bodyParser.json());

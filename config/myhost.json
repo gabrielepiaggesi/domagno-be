@@ -1,0 +1,6 @@
+{
+    "PORT": "4200",
+    "ENV": "pre",
+    "DB_URI": "mongodb://insoore-test:K5F96f6G9ZLO1tNEn9ix5xQb088Gw9jTS6KZ23BaA3HNklBXlsakTku3kx9MoeWyJ81AP24TU6rwXo7yP9GfWg==@insoore-test.documents.azure.com:10255/?ssl=true&replicaSet=events-dev",
+    "DB_NAME": "insoore"
+}

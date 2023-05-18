@@ -4,7 +4,9 @@
   "description": "nodejs backend for self-shooting project",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node ./dist/index.js",
+    "start": "tsc && set NODE_ENV=pre&& node ./dist/index.js",
+    "local": "tsc && set NODE_ENV=myhost&& node ./dist/index.js",
+    "pre": "tsc && set NODE_ENV=pre&& node ./dist/index.js",
     "prod": "node ./dist/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
