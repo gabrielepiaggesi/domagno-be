@@ -38,7 +38,7 @@ class Axios {
     }
     static put(token, endpoint, body, contentType = 'application/json') {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield axios_1.default.post(endpoint, body, getHeaders(token, contentType))).data;
+            return (yield axios_1.default.put(endpoint, body, getHeaders(token, contentType))).data;
         });
     }
 }
