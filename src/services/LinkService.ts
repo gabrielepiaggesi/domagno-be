@@ -32,7 +32,7 @@ export class LinkService implements LinkApi {
         
         const newLink = new Link();
         newLink.uuid = RandomID.generate();
-        newLink.status = LinkStatus.Active; // change to inactive and set active from assignment
+        newLink.status = LinkStatus.InActive;
         newLink.assignmentId = assignmentId;
         const linkSaved = await linkRepository.save(newLink);
         newLink._id = linkSaved.insertedId;
