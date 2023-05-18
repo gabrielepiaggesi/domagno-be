@@ -24,7 +24,7 @@ class LinkController {
     getLink(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield linkService.getLink(req.params.linkUUID);
+                const response = yield linkService.getLink(+req.params.assignmentId);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -33,10 +33,22 @@ class LinkController {
             }
         });
     }
+    getLinkByUUID(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield linkService.getLinkByUUID(req.params.linkUUID);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Link.getLinkByUUID.Error' }));
+            }
+        });
+    }
     saveLink(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield linkService.saveLink(req.body);
+                const response = yield linkService.saveLink(+req.params.assignmentId);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -72,11 +84,15 @@ class LinkController {
 }
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
-    (0, HttpMehtodDecorators_1.Path)("/info/:linkUUID")
+    (0, HttpMehtodDecorators_1.Path)("/id/:assignmentId")
 ], LinkController.prototype, "getLink", null);
 __decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/uuid/:linkUUID")
+], LinkController.prototype, "getLinkByUUID", null);
+__decorate([
     (0, HttpMehtodDecorators_1.Post)(),
-    (0, HttpMehtodDecorators_1.Path)("/save")
+    (0, HttpMehtodDecorators_1.Path)("/save/:assignmentId")
 ], LinkController.prototype, "saveLink", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Put)(),

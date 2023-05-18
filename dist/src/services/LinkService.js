@@ -11,28 +11,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkService = void 0;
 const Log_1 = require("../../utils/Log");
+const RandomID_1 = require("../../utils/RandomID");
 const ServerError_1 = require("../../utils/ServerError");
 const LinkStatus_enum_1 = require("../enums/LinkStatus.enum");
 const Link_1 = require("../models/Link");
 const LinkRepository_1 = require("../repositories/LinkRepository");
 const linkRepository = new LinkRepository_1.LinkRepository();
 class LinkService {
-    getLink(linkUUID) {
+    getLink(assignmentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield linkRepository.findOneByKeyValue('assignmentId', assignmentId);
+        });
+    }
+    getLinkByUUID(linkUUID) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield linkRepository.findOneByKeyValue('uuid', linkUUID);
         });
     }
-    saveLink(linkData) {
+    saveLink(assignmentId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const equalLink = yield this.getLink(linkData.uuid);
+            const equalLink = yield this.getLink(assignmentId);
             if (equalLink) {
-                Log_1.LOG.warn('Cannot save link, returning equal one', linkData.uuid, equalLink._id);
+                Log_1.LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
                 return equalLink;
             }
             const newLink = new Link_1.Link();
-            newLink.uuid = linkData.uuid;
+            newLink.uuid = RandomID_1.RandomID.generate();
             newLink.status = LinkStatus_enum_1.LinkStatus.Active;
-            newLink.assignmentId = linkData.assignmentId;
+            newLink.assignmentId = assignmentId;
             const linkSaved = yield linkRepository.save(newLink);
             newLink._id = linkSaved.insertedId;
             Log_1.LOG.success('New link saved', newLink.uuid, newLink._id);

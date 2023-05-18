@@ -9,10 +9,10 @@ const linkService = new LinkService();
 export class LinkController implements LinkApi {
 
     @Get()
-    @Path("/info/:linkUUID")
+    @Path("/id/:assignmentId")
     public async getLink(res: Response, req) {
         try {
-            const response = await linkService.getLink(req.params.linkUUID);
+            const response = await linkService.getLink(+req.params.assignmentId);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
@@ -20,11 +20,23 @@ export class LinkController implements LinkApi {
         }
     }
 
+    @Get()
+    @Path("/uuid/:linkUUID")
+    public async getLinkByUUID(res: Response, req) {
+        try {
+            const response = await linkService.getLinkByUUID(req.params.linkUUID);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Link.getLinkByUUID.Error'});
+        }
+    }
+
     @Post()
-    @Path("/save")
+    @Path("/save/:assignmentId")
     public async saveLink(res: Response, req) {
         try {
-            const response = await linkService.saveLink(req.body);
+            const response = await linkService.saveLink(+req.params.assignmentId);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);

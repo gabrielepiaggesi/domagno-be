@@ -1,4 +1,5 @@
 import { LOG } from "../../utils/Log";
+import { RandomID } from "../../utils/RandomID";
 import { ServerError } from "../../utils/ServerError";
 import { LinkApi } from "../apis/LinkApi";
 import { LinkStatus } from "../enums/LinkStatus.enum";
@@ -9,21 +10,25 @@ const linkRepository = new LinkRepository();
 
 export class LinkService implements LinkApi {
 
-    public async getLink(linkUUID: string) {
+    public async getLink(assignmentId: number) {
+        return await linkRepository.findOneByKeyValue('assignmentId', assignmentId);
+    }
+
+    public async getLinkByUUID(linkUUID: string) {
         return await linkRepository.findOneByKeyValue('uuid', linkUUID);
     }
     
-    public async saveLink(linkData: { uuid: string, assignmentId: number }) {
-        const equalLink = await this.getLink(linkData.uuid);
+    public async saveLink(assignmentId: number) {
+        const equalLink = await this.getLink(assignmentId);
         if (equalLink) {
-            LOG.warn('Cannot save link, returning equal one', linkData.uuid, equalLink._id);
+            LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
             return equalLink;
         }
         
         const newLink = new Link();
-        newLink.uuid = linkData.uuid;
+        newLink.uuid = RandomID.generate();
         newLink.status = LinkStatus.Active;
-        newLink.assignmentId = linkData.assignmentId;
+        newLink.assignmentId = assignmentId;
         const linkSaved = await linkRepository.save(newLink);
         newLink._id = linkSaved.insertedId;
 
