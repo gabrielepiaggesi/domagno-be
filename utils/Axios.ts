@@ -21,6 +21,6 @@ export class Axios {
     }
     
     static async put(token: string, endpoint: string, body: any, contentType = 'application/json') {
-        return (await axios.post(endpoint, body, getHeaders(token, contentType))).data;
+        return (await axios.put(endpoint, body, getHeaders(token, contentType))).data;
     }
 }
