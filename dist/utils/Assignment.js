@@ -54,6 +54,11 @@ class Assignment {
             return yield Axios_1.Axios.post(token, this.ASSIGNMENT_URL + `Assignments/${assignmentId}/fire`, { trigger: 15 });
         });
     }
+    static toggleAttesa(assignmentId, inAttesa, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Axios_1.Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "Self-Shooting LINK" });
+        });
+    }
     static removeAttachment(assignmentId, fileId, token) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield Axios_1.Axios.delete(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments/${fileId}`);

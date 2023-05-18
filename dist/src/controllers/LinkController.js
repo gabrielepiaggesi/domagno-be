@@ -21,15 +21,15 @@ const Log_1 = require("../../utils/Log");
 const LinkService_1 = require("../services/LinkService");
 const linkService = new LinkService_1.LinkService();
 class LinkController {
-    getLink(res, req) {
+    getLinkByID(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield linkService.getLink(+req.params.assignmentId);
+                const response = yield linkService.getLinkByID(req.params.linkID);
                 return res.status(200).json(response);
             }
             catch (e) {
                 Log_1.LOG.error(e);
-                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Link.getLink.Error' }));
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Link.getLinkByID.Error' }));
             }
         });
     }
@@ -42,6 +42,18 @@ class LinkController {
             catch (e) {
                 Log_1.LOG.error(e);
                 return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Link.getLinkByUUID.Error' }));
+            }
+        });
+    }
+    getLinkByAssignmentID(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield linkService.getLinkByAssignmentID(+req.params.assignmentId);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Link.getLinkByAssignmentID.Error' }));
             }
         });
     }
@@ -72,7 +84,7 @@ class LinkController {
     removeLink(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield linkService.removeLink(req.params.linkUUID);
+                const response = yield linkService.removeLink(req.params.linkID);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -84,12 +96,16 @@ class LinkController {
 }
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
-    (0, HttpMehtodDecorators_1.Path)("/id/:assignmentId")
-], LinkController.prototype, "getLink", null);
+    (0, HttpMehtodDecorators_1.Path)("/id/:linkID")
+], LinkController.prototype, "getLinkByID", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
     (0, HttpMehtodDecorators_1.Path)("/uuid/:linkUUID")
 ], LinkController.prototype, "getLinkByUUID", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/assignmentId/:assignmentId")
+], LinkController.prototype, "getLinkByAssignmentID", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Path)("/save/:assignmentId")
@@ -100,7 +116,7 @@ __decorate([
 ], LinkController.prototype, "changeLinkStatus", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Delete)(),
-    (0, HttpMehtodDecorators_1.Path)("/remove/:linkUUID")
+    (0, HttpMehtodDecorators_1.Path)("/remove/:linkID")
 ], LinkController.prototype, "removeLink", null);
 exports.LinkController = LinkController;
 //# sourceMappingURL=LinkController.js.map

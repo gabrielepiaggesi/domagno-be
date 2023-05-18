@@ -1,3 +1,4 @@
+import { Assignment } from "../../utils/Assignment";
 import { LOG } from "../../utils/Log";
 import { RandomID } from "../../utils/RandomID";
 import { ServerError } from "../../utils/ServerError";
@@ -10,16 +11,20 @@ const linkRepository = new LinkRepository();
 
 export class LinkService implements LinkApi {
 
-    public async getLink(assignmentId: number) {
+    public async getLinkByAssignmentID(assignmentId: number) {
         return await linkRepository.findOneByKeyValue('assignmentId', assignmentId);
     }
 
     public async getLinkByUUID(linkUUID: string) {
         return await linkRepository.findOneByKeyValue('uuid', linkUUID);
     }
+
+    public async getLinkByID(linkID: string) {
+        return await linkRepository.findById(linkID);
+    }
     
     public async saveLink(assignmentId: number) {
-        const equalLink = await this.getLink(assignmentId);
+        const equalLink = await this.getLinkByAssignmentID(assignmentId);
         if (equalLink) {
             LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
             return equalLink;
@@ -34,6 +39,12 @@ export class LinkService implements LinkApi {
 
         LOG.success('New link saved', newLink.uuid, newLink._id);
         return newLink;
+    }
+
+    public async sendFiles(linkID: string, token: string) {
+        const link = await linkRepository.findById(linkID);
+        this.changeLinkStatus(linkID, 'inactive');
+        return await Assignment.toggleAttesa(link.assignmentId, true, token);
     }
 
     public async changeLinkStatus(linkID: string, status: any) {

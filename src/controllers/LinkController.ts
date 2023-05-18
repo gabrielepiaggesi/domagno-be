@@ -9,14 +9,14 @@ const linkService = new LinkService();
 export class LinkController implements LinkApi {
 
     @Get()
-    @Path("/id/:assignmentId")
-    public async getLink(res: Response, req) {
+    @Path("/id/:linkID")
+    public async getLinkByID(res: Response, req) {
         try {
-            const response = await linkService.getLink(+req.params.assignmentId);
+            const response = await linkService.getLinkByID(req.params.linkID);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
-            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Link.getLink.Error'});
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Link.getLinkByID.Error'});
         }
     }
 
@@ -29,6 +29,18 @@ export class LinkController implements LinkApi {
         } catch(e) {
             LOG.error(e);
             return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Link.getLinkByUUID.Error'});
+        }
+    }
+
+    @Get()
+    @Path("/assignmentId/:assignmentId")
+    public async getLinkByAssignmentID(res: Response, req) {
+        try {
+            const response = await linkService.getLinkByAssignmentID(+req.params.assignmentId);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Link.getLinkByAssignmentID.Error'});
         }
     }
 
@@ -57,10 +69,10 @@ export class LinkController implements LinkApi {
     }
 
     @Delete()
-    @Path("/remove/:linkUUID")
+    @Path("/remove/:linkID")
     public async removeLink(res: Response, req) {
         try {
-            const response = await linkService.removeLink(req.params.linkUUID);
+            const response = await linkService.removeLink(req.params.linkID);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);

@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkService = void 0;
+const Assignment_1 = require("../../utils/Assignment");
 const Log_1 = require("../../utils/Log");
 const RandomID_1 = require("../../utils/RandomID");
 const ServerError_1 = require("../../utils/ServerError");
@@ -18,7 +19,7 @@ const Link_1 = require("../models/Link");
 const LinkRepository_1 = require("../repositories/LinkRepository");
 const linkRepository = new LinkRepository_1.LinkRepository();
 class LinkService {
-    getLink(assignmentId) {
+    getLinkByAssignmentID(assignmentId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield linkRepository.findOneByKeyValue('assignmentId', assignmentId);
         });
@@ -28,9 +29,14 @@ class LinkService {
             return yield linkRepository.findOneByKeyValue('uuid', linkUUID);
         });
     }
+    getLinkByID(linkID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield linkRepository.findById(linkID);
+        });
+    }
     saveLink(assignmentId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const equalLink = yield this.getLink(assignmentId);
+            const equalLink = yield this.getLinkByAssignmentID(assignmentId);
             if (equalLink) {
                 Log_1.LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
                 return equalLink;
@@ -43,6 +49,13 @@ class LinkService {
             newLink._id = linkSaved.insertedId;
             Log_1.LOG.success('New link saved', newLink.uuid, newLink._id);
             return newLink;
+        });
+    }
+    sendFiles(linkID, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const link = yield linkRepository.findById(linkID);
+            this.changeLinkStatus(linkID, 'inactive');
+            return yield Assignment_1.Assignment.toggleAttesa(link.assignmentId, true, token);
         });
     }
     changeLinkStatus(linkID, status) {

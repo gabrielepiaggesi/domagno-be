@@ -38,6 +38,10 @@ export class Assignment {
         return await Axios.post(token, this.ASSIGNMENT_URL + `Assignments/${assignmentId}/fire`, { trigger: 15 });
     }
 
+    static async toggleAttesa(assignmentId: number, inAttesa: boolean, token: string): Promise<any> {
+        return await Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "Self-Shooting LINK" });
+    }
+
     static async removeAttachment(assignmentId: number, fileId: number, token: string): Promise<any> {
         return await Axios.delete(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments/${fileId}`);
     }
