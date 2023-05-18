@@ -5,4 +5,5 @@ export interface LinkApi {
     getLinkByID(...args);
     changeLinkStatus(...args);
     removeLink(...args);
+    sendFiles(...args);
 }
