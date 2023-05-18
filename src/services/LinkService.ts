@@ -32,7 +32,7 @@ export class LinkService implements LinkApi {
         
         const newLink = new Link();
         newLink.uuid = RandomID.generate();
-        newLink.status = LinkStatus.InActive;
+        newLink.status = "inactive";
         newLink.assignmentId = assignmentId;
         const linkSaved = await linkRepository.save(newLink);
         newLink._id = linkSaved.insertedId;
@@ -53,11 +53,9 @@ export class LinkService implements LinkApi {
         return await Assignment.toggleAttesa(link.assignmentId, true, token);
     }
 
-    public async changeLinkStatus(linkID: string, status: any) {
+    public async changeLinkStatus(linkID: string, status: LinkStatus) {
         LOG.info('Changing link status to', status, linkID);
-        const newStatus = LinkStatus[status];
-        if (!newStatus) throw new ServerError('WRONG_LINK_STATUS');
-        return await linkRepository.updateStatus(linkID, newStatus);
+        return await linkRepository.updateStatus(linkID, status);
     }
 
     public async removeLink(linkID: string) {

@@ -1,4 +1,1 @@
-export enum LinkStatus {
-    Active = "active",
-    InActive = "inactive"
-}
+export type LinkStatus = "active"|"inactive";

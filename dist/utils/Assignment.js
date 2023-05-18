@@ -25,7 +25,7 @@ class Assignment {
             const fileExtension = file.originalname.replaceAll(/\s/g, '').split('.')[1];
             const uniqueFileName = fileName + '_' + assignmentId + '_' + (0, moment_1.default)().valueOf() + '.' + fileExtension;
             formData.append("fileData", file.buffer, uniqueFileName);
-            formData.append("Type", '22');
+            formData.append("Type", file.mimetype.includes('image') ? '33' : '32');
             formData.append("Name", uniqueFileName);
             formData.append("Description", "");
             const uploadEndpoint = this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments`;

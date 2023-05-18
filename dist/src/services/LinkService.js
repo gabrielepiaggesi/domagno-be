@@ -13,8 +13,6 @@ exports.LinkService = void 0;
 const Assignment_1 = require("../../utils/Assignment");
 const Log_1 = require("../../utils/Log");
 const RandomID_1 = require("../../utils/RandomID");
-const ServerError_1 = require("../../utils/ServerError");
-const LinkStatus_enum_1 = require("../enums/LinkStatus.enum");
 const Link_1 = require("../models/Link");
 const LinkRepository_1 = require("../repositories/LinkRepository");
 const linkRepository = new LinkRepository_1.LinkRepository();
@@ -43,7 +41,7 @@ class LinkService {
             }
             const newLink = new Link_1.Link();
             newLink.uuid = RandomID_1.RandomID.generate();
-            newLink.status = LinkStatus_enum_1.LinkStatus.Active; // change to inactive and set active from assignment
+            newLink.status = "inactive";
             newLink.assignmentId = assignmentId;
             const linkSaved = yield linkRepository.save(newLink);
             newLink._id = linkSaved.insertedId;
@@ -68,10 +66,7 @@ class LinkService {
     changeLinkStatus(linkID, status) {
         return __awaiter(this, void 0, void 0, function* () {
             Log_1.LOG.info('Changing link status to', status, linkID);
-            const newStatus = LinkStatus_enum_1.LinkStatus[status];
-            if (!newStatus)
-                throw new ServerError_1.ServerError('WRONG_LINK_STATUS');
-            return yield linkRepository.updateStatus(linkID, newStatus);
+            return yield linkRepository.updateStatus(linkID, status);
         });
     }
     removeLink(linkID) {

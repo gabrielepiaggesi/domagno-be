@@ -1,7 +1,8 @@
 import { Model } from "../../utils/Model";
+import { LinkStatus } from "../enums/LinkStatus.enum";
 
 export class Link extends Model {
     uuid: string;
-    status: string;
+    status: LinkStatus;
     assignmentId: number;
 }
