@@ -16,6 +16,7 @@ exports.Assignment = void 0;
 const Axios_1 = require("./Axios");
 const form_data_1 = __importDefault(require("form-data"));
 const moment_1 = __importDefault(require("moment"));
+const config_1 = __importDefault(require("config"));
 class Assignment {
     static uploadAttachment(assignmentId, file, token) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -65,6 +66,6 @@ class Assignment {
         });
     }
 }
-Assignment.ASSIGNMENT_URL = 'http://whoosnapinsurancetest2.westeurope.cloudapp.azure.com:8254/api/v1/';
+Assignment.ASSIGNMENT_URL = config_1.default.get('ASSIGNMENT_URL');
 exports.Assignment = Assignment;
 //# sourceMappingURL=Assignment.js.map

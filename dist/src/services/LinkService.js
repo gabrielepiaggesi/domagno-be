@@ -43,7 +43,7 @@ class LinkService {
             }
             const newLink = new Link_1.Link();
             newLink.uuid = RandomID_1.RandomID.generate();
-            newLink.status = LinkStatus_enum_1.LinkStatus.InActive;
+            newLink.status = LinkStatus_enum_1.LinkStatus.Active; // change to inactive and set active from assignment
             newLink.assignmentId = assignmentId;
             const linkSaved = yield linkRepository.save(newLink);
             newLink._id = linkSaved.insertedId;

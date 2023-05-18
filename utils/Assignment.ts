@@ -1,9 +1,10 @@
 import { Axios } from "./Axios";
 import FormData from 'form-data';
 import moment from 'moment';
+import config from 'config';
 
 export class Assignment {
-    private static readonly ASSIGNMENT_URL = 'http://whoosnapinsurancetest2.westeurope.cloudapp.azure.com:8254/api/v1/';
+    private static readonly ASSIGNMENT_URL = config.get('ASSIGNMENT_URL');
 
     static async uploadAttachment(assignmentId: number, file: any, token: string): Promise<any> {
         const formData = new FormData();
