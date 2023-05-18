@@ -54,19 +54,6 @@ class FileController {
             }
         });
     }
-    sendFiles(res, req) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const token = req.header('Authorization');
-                const response = yield fileService.sendFiles(+req.params.assignmentId, token);
-                return res.status(200).json(response);
-            }
-            catch (e) {
-                Log_1.LOG.error(e);
-                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'File.sendFiles.Error' }));
-            }
-        });
-    }
     deleteFile(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -90,10 +77,6 @@ __decorate([
     (0, HttpMehtodDecorators_1.Multer)({ multerConfig, type: 'single', path: 'file' }),
     (0, HttpMehtodDecorators_1.Path)("/upload/:assignmentId")
 ], FileController.prototype, "uploadFile", null);
-__decorate([
-    (0, HttpMehtodDecorators_1.Post)(),
-    (0, HttpMehtodDecorators_1.Path)("/send/:assignmentId")
-], FileController.prototype, "sendFiles", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Delete)(),
     (0, HttpMehtodDecorators_1.Path)("/delete/:assignmentId/:fileId")

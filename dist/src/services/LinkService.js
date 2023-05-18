@@ -43,7 +43,7 @@ class LinkService {
             }
             const newLink = new Link_1.Link();
             newLink.uuid = RandomID_1.RandomID.generate();
-            newLink.status = LinkStatus_enum_1.LinkStatus.Active;
+            newLink.status = LinkStatus_enum_1.LinkStatus.InActive;
             newLink.assignmentId = assignmentId;
             const linkSaved = yield linkRepository.save(newLink);
             newLink._id = linkSaved.insertedId;
@@ -54,7 +54,14 @@ class LinkService {
     sendFiles(linkID, token) {
         return __awaiter(this, void 0, void 0, function* () {
             const link = yield linkRepository.findById(linkID);
-            this.changeLinkStatus(linkID, 'inactive');
+            yield this.changeLinkStatus(linkID, 'inactive');
+            return yield Assignment_1.Assignment.toggleAttesa(link.assignmentId, false, token);
+        });
+    }
+    activeLink(linkID, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const link = yield linkRepository.findById(linkID);
+            yield this.changeLinkStatus(linkID, 'active');
             return yield Assignment_1.Assignment.toggleAttesa(link.assignmentId, true, token);
         });
     }

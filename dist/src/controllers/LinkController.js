@@ -69,6 +69,32 @@ class LinkController {
             }
         });
     }
+    sendFiles(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.header('Authorization');
+                const response = yield linkService.sendFiles(req.params.linkID, token);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Link.sendFiles.Error' }));
+            }
+        });
+    }
+    activeLink(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.header('Authorization');
+                const response = yield linkService.activeLink(req.params.linkID, token);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Link.activeLink.Error' }));
+            }
+        });
+    }
     changeLinkStatus(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -110,6 +136,14 @@ __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Path)("/save/:assignmentId")
 ], LinkController.prototype, "saveLink", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/sendFiles/:linkID")
+], LinkController.prototype, "sendFiles", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/active/:linkID")
+], LinkController.prototype, "activeLink", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Put)(),
     (0, HttpMehtodDecorators_1.Path)("/changeStatus/:linkID/:status")
