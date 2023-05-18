@@ -12,7 +12,7 @@ export class Assignment {
         const fileExtension = file.originalname.replaceAll(/\s/g,'').split('.')[1];
         const uniqueFileName = fileName + '_' + assignmentId + '_' + moment().valueOf() + '.' + fileExtension;
         formData.append("fileData", file.buffer, uniqueFileName);
-        formData.append("Type", '22');
+        formData.append("Type", file.mimetype.includes('image') ? '33' : '32');
         formData.append("Name", uniqueFileName);
         formData.append("Description", "");
 
