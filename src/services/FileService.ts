@@ -22,10 +22,6 @@ export class FileService implements FileApi {
         const newAttachment = await Assignment.uploadAttachment(assignmentId, file, token);
         return this.transformObjToFileItem(newAttachment);
     }
-
-    public async sendFiles(assignmentId: number, token: string) {
-        return await Assignment.firePerizia(assignmentId, token);
-    }
     
     public async deleteFile(assignmentId: number, fileId: number, token: string) {
         return await Assignment.removeAttachment(assignmentId, fileId, token);

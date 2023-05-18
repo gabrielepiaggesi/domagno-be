@@ -69,6 +69,19 @@ export class LinkController implements LinkApi {
         }
     }
 
+    @Post()
+    @Path("/active/:linkID")
+    public async activeLink(res: Response, req) {
+        try {
+            const token = req.header('Authorization');
+            const response = await linkService.activeLink(req.params.linkID, token);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Link.activeLink.Error'});
+        }
+    }
+
     @Put()
     @Path("/changeStatus/:linkID/:status")
     public async changeLinkStatus(res: Response, req) {

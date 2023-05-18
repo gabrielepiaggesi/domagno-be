@@ -6,4 +6,5 @@ export interface LinkApi {
     changeLinkStatus(...args);
     removeLink(...args);
     sendFiles(...args);
+    activeLink(...args);
 }

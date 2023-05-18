@@ -42,19 +42,6 @@ export class FileController implements FileApi {
         }
     }
 
-    @Post()
-    @Path("/send/:assignmentId")
-    public async sendFiles(res: Response, req) {
-        try {
-            const token = req.header('Authorization');
-            const response = await fileService.sendFiles(+req.params.assignmentId, token);
-            return res.status(200).json(response);
-        } catch(e) {
-            LOG.error(e);
-            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'File.sendFiles.Error'});
-        }
-    }
-
     @Delete()
     @Path("/delete/:assignmentId/:fileId")
     public async deleteFile(res: Response, req) {

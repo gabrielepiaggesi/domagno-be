@@ -32,7 +32,7 @@ export class LinkService implements LinkApi {
         
         const newLink = new Link();
         newLink.uuid = RandomID.generate();
-        newLink.status = LinkStatus.Active;
+        newLink.status = LinkStatus.InActive;
         newLink.assignmentId = assignmentId;
         const linkSaved = await linkRepository.save(newLink);
         newLink._id = linkSaved.insertedId;
@@ -43,7 +43,13 @@ export class LinkService implements LinkApi {
 
     public async sendFiles(linkID: string, token: string) {
         const link = await linkRepository.findById(linkID);
-        this.changeLinkStatus(linkID, 'inactive');
+        await this.changeLinkStatus(linkID, 'inactive');
+        return await Assignment.toggleAttesa(link.assignmentId, false, token);
+    }
+
+    public async activeLink(linkID: string, token: string) {
+        const link = await linkRepository.findById(linkID);
+        await this.changeLinkStatus(linkID, 'active');
         return await Assignment.toggleAttesa(link.assignmentId, true, token);
     }
 
