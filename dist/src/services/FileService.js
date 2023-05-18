@@ -14,8 +14,6 @@ const ServerError_1 = require("../../utils/ServerError");
 const FileItemDTO_1 = require("../dtos/FileItemDTO");
 const FileStatus_enum_1 = require("../enums/FileStatus.enum");
 const Assignment_1 = require("../../utils/Assignment");
-const LinkService_1 = require("./LinkService");
-const linkService = new LinkService_1.LinkService();
 class FileService {
     getFiles(assignmentId, token) {
         return __awaiter(this, void 0, void 0, function* () {

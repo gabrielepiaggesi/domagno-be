@@ -3,9 +3,7 @@ import { FileApi } from "../apis/FileApi";
 import { FileItemDTO } from "../dtos/FileItemDTO";
 import { FileStatus } from "../enums/FileStatus.enum";
 import { Assignment } from "../../utils/Assignment";
-import { LinkService } from "./LinkService";
 
-const linkService = new LinkService();
 export class FileService implements FileApi {
 
     public async getFiles(assignmentId: number, token: string): Promise<FileItemDTO[]> {
