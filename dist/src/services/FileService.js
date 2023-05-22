@@ -21,7 +21,7 @@ class FileService {
             if (phaseId != 2)
                 throw new ServerError_1.ServerError('WRONG_ASS_PHASE', null, 403);
             const attachments = (yield Assignment_1.Assignment.getAttachments(assignmentId, token)) || [];
-            return attachments.filter(att => !att.isDeleted).map(att => this.transformObjToFileItem(att));
+            return attachments.filter(att => !att.isDeleted && [32, 33].includes(att.type.id)).map(att => this.transformObjToFileItem(att));
         });
     }
     uploadFile(assignmentId, file, token) {
