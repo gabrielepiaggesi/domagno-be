@@ -16,11 +16,11 @@ const multerConfig = {
 export class FileController implements FileApi {
 
     @Get()
-    @Path("/list/:assignmentId")
+    @Path("/list/:linkID")
     public async getFiles(res: Response, req) {
         try {
             const token = req.header('Authorization');
-            const response = await fileService.getFiles(+req.params.assignmentId, token);
+            const response = await fileService.getFiles(req.params.linkID, token);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
@@ -30,11 +30,11 @@ export class FileController implements FileApi {
     
     @Post()
     @Multer({ multerConfig, type: 'single', path: 'file' })
-    @Path("/upload/:assignmentId")
+    @Path("/upload/:linkID")
     public async uploadFile(res: Response, req) {
         try {
             const token = req.header('Authorization');
-            const response = await fileService.uploadFile(+req.params.assignmentId, req.file, token);
+            const response = await fileService.uploadFile(req.params.linkID, req.file, token);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
@@ -43,11 +43,11 @@ export class FileController implements FileApi {
     }
 
     @Delete()
-    @Path("/delete/:assignmentId/:fileId")
+    @Path("/delete/:linkID/:fileId")
     public async deleteFile(res: Response, req) {
         try {
             const token = req.header('Authorization');
-            const response = await fileService.deleteFile(+req.params.assignmentId, +req.params.fileId, token);
+            const response = await fileService.deleteFile(req.params.linkID, +req.params.fileId, token);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
