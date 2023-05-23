@@ -12,15 +12,21 @@ const linkRepository = new LinkRepository();
 export class LinkService implements LinkApi {
 
     public async getLinkByAssignmentID(assignmentId: number) {
-        return await linkRepository.findOneByKeyValue('assignmentId', assignmentId);
+        const link = await linkRepository.findOneByKeyValue('assignmentId', assignmentId);
+        delete link.assignmentId;
+        return link;
     }
 
     public async getLinkByUUID(linkUUID: string) {
-        return await linkRepository.findOneByKeyValue('uuid', linkUUID);
+        const link = await linkRepository.findOneByKeyValue('uuid', linkUUID);
+        delete link.assignmentId;
+        return link;
     }
 
     public async getLinkByID(linkID: string) {
-        return await linkRepository.findById(linkID);
+        const link = await linkRepository.findById(linkID);
+        delete link.assignmentId;
+        return link;
     }
     
     public async saveLink(assignmentId: number) {
@@ -43,14 +49,16 @@ export class LinkService implements LinkApi {
 
     public async sendFiles(linkID: string, token: string) {
         const link = await linkRepository.findById(linkID);
+        const assignmentRes = await Assignment.toggleAttesa(link.assignmentId, false, token);
         await this.changeLinkStatus(linkID, 'inactive');
-        return await Assignment.toggleAttesa(link.assignmentId, false, token);
+        return assignmentRes;
     }
 
     public async activeLink(linkID: string, token: string) {
         const link = await linkRepository.findById(linkID);
+        const assignmentRes = await Assignment.toggleAttesa(link.assignmentId, true, token);
         await this.changeLinkStatus(linkID, 'active');
-        return await Assignment.toggleAttesa(link.assignmentId, true, token);
+        return assignmentRes;
     }
 
     public async changeLinkStatus(linkID: string, status: LinkStatus) {
