@@ -10,7 +10,7 @@ const linkService = new LinkService();
 export class FileService implements FileApi {
 
     public async getFiles(linkID: string, token: string): Promise<FileItemDTO[]> {
-        const link = await linkService.getLinkByID(linkID);
+        const link = await linkService.getLinkByID(linkID, true);
         if (!link) throw new ServerError('LINK_NOT_FOUND');
 
         const phaseId = await Assignment.getPhase(link.assignmentId, token);
@@ -21,7 +21,7 @@ export class FileService implements FileApi {
     }
     
     public async uploadFile(linkID: string, file: any|null, token: string): Promise<FileItemDTO> {
-        const link = await linkService.getLinkByID(linkID);
+        const link = await linkService.getLinkByID(linkID, true);
         if (!link) throw new ServerError('LINK_NOT_FOUND');
 
         if (!file) throw new ServerError('MISSING_FILE');
@@ -30,7 +30,7 @@ export class FileService implements FileApi {
     }
     
     public async deleteFile(linkID: string, fileId: number, token: string) {
-        const link = await linkService.getLinkByID(linkID);
+        const link = await linkService.getLinkByID(linkID, true);
         if (!link) throw new ServerError('LINK_NOT_FOUND');
     
         return await Assignment.removeAttachment(link.assignmentId, fileId, token);

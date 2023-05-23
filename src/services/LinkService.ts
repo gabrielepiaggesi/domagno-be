@@ -23,9 +23,9 @@ export class LinkService implements LinkApi {
         return link;
     }
 
-    public async getLinkByID(linkID: string) {
+    public async getLinkByID(linkID: string, fromInternal = false) {
         const link = await linkRepository.findById(linkID);
-        delete link.assignmentId;
+        if (!fromInternal) delete link.assignmentId;
         return link;
     }
     
