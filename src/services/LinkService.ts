@@ -13,19 +13,19 @@ export class LinkService implements LinkApi {
 
     public async getLinkByAssignmentID(assignmentId: number) {
         const link = await linkRepository.findOneByKeyValue('assignmentId', assignmentId);
-        delete link.assignmentId;
+        if (link) delete link.assignmentId;
         return link;
     }
 
     public async getLinkByUUID(linkUUID: string) {
         const link = await linkRepository.findOneByKeyValue('uuid', linkUUID);
-        delete link.assignmentId;
+        if (link) delete link.assignmentId;
         return link;
     }
 
     public async getLinkByID(linkID: string, fromInternal = false) {
         const link = await linkRepository.findById(linkID);
-        if (!fromInternal) delete link.assignmentId;
+        if (!fromInternal && link) delete link.assignmentId;
         return link;
     }
     
