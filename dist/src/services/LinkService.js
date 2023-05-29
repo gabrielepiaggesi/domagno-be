@@ -13,35 +13,47 @@ exports.LinkService = void 0;
 const Assignment_1 = require("../../utils/Assignment");
 const Log_1 = require("../../utils/Log");
 const RandomID_1 = require("../../utils/RandomID");
+const ServerError_1 = require("../../utils/ServerError");
 const Link_1 = require("../models/Link");
 const LinkRepository_1 = require("../repositories/LinkRepository");
 const linkRepository = new LinkRepository_1.LinkRepository();
 class LinkService {
     getLinkByAssignmentID(assignmentId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield linkRepository.findOneByKeyValue('assignmentId', assignmentId);
+            const link = yield linkRepository.findOneByKeyValue('assignmentId', assignmentId);
+            if (link)
+                delete link.assignmentId;
+            return link;
         });
     }
     getLinkByUUID(linkUUID) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield linkRepository.findOneByKeyValue('uuid', linkUUID);
+            const link = yield linkRepository.findOneByKeyValue('uuid', linkUUID);
+            if (link)
+                delete link.assignmentId;
+            return link;
         });
     }
-    getLinkByID(linkID) {
+    getLinkByID(linkID, fromInternal = false) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield linkRepository.findById(linkID);
+            const link = yield linkRepository.findById(linkID);
+            if (!fromInternal && link)
+                delete link.assignmentId;
+            return link;
         });
     }
-    saveLink(assignmentId) {
+    saveLink(assignmentId, status = 'inactive') {
         return __awaiter(this, void 0, void 0, function* () {
             const equalLink = yield this.getLinkByAssignmentID(assignmentId);
             if (equalLink) {
                 Log_1.LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
                 return equalLink;
             }
+            if (!['active', 'inactive'].includes(status))
+                throw new ServerError_1.ServerError('LINK_STATUS_INVALID');
             const newLink = new Link_1.Link();
             newLink.uuid = RandomID_1.RandomID.generate();
-            newLink.status = "inactive";
+            newLink.status = status;
             newLink.assignmentId = assignmentId;
             const linkSaved = yield linkRepository.save(newLink);
             newLink._id = linkSaved.insertedId;
@@ -52,20 +64,24 @@ class LinkService {
     sendFiles(linkID, token) {
         return __awaiter(this, void 0, void 0, function* () {
             const link = yield linkRepository.findById(linkID);
+            const assignmentRes = yield Assignment_1.Assignment.toggleAttesa(link.assignmentId, false, token);
             yield this.changeLinkStatus(linkID, 'inactive');
-            return yield Assignment_1.Assignment.toggleAttesa(link.assignmentId, false, token);
+            return assignmentRes;
         });
     }
     activeLink(linkID, token) {
         return __awaiter(this, void 0, void 0, function* () {
             const link = yield linkRepository.findById(linkID);
+            const assignmentRes = yield Assignment_1.Assignment.toggleAttesa(link.assignmentId, true, token);
             yield this.changeLinkStatus(linkID, 'active');
-            return yield Assignment_1.Assignment.toggleAttesa(link.assignmentId, true, token);
+            return assignmentRes;
         });
     }
     changeLinkStatus(linkID, status) {
         return __awaiter(this, void 0, void 0, function* () {
             Log_1.LOG.info('Changing link status to', status, linkID);
+            if (!['active', 'inactive'].includes(status))
+                throw new ServerError_1.ServerError('LINK_STATUS_INVALID');
             return yield linkRepository.updateStatus(linkID, status);
         });
     }

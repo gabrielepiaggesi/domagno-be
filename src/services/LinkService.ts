@@ -1,9 +1,9 @@
+import { LinkStatus } from './../enums/LinkStatus.enum';
 import { Assignment } from "../../utils/Assignment";
 import { LOG } from "../../utils/Log";
 import { RandomID } from "../../utils/RandomID";
 import { ServerError } from "../../utils/ServerError";
 import { LinkApi } from "../apis/LinkApi";
-import { LinkStatus } from "../enums/LinkStatus.enum";
 import { Link } from "../models/Link";
 import { LinkRepository } from "../repositories/LinkRepository";
 
@@ -29,16 +29,18 @@ export class LinkService implements LinkApi {
         return link;
     }
     
-    public async saveLink(assignmentId: number) {
+    public async saveLink(assignmentId: number, status: LinkStatus = 'inactive') {
         const equalLink = await this.getLinkByAssignmentID(assignmentId);
         if (equalLink) {
             LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
             return equalLink;
         }
+
+        if (!['active', 'inactive'].includes(status)) throw new ServerError('LINK_STATUS_INVALID');
         
         const newLink = new Link();
         newLink.uuid = RandomID.generate();
-        newLink.status = "inactive";
+        newLink.status = status;
         newLink.assignmentId = assignmentId;
         const linkSaved = await linkRepository.save(newLink);
         newLink._id = linkSaved.insertedId;
@@ -63,6 +65,7 @@ export class LinkService implements LinkApi {
 
     public async changeLinkStatus(linkID: string, status: LinkStatus) {
         LOG.info('Changing link status to', status, linkID);
+        if (!['active', 'inactive'].includes(status)) throw new ServerError('LINK_STATUS_INVALID');
         return await linkRepository.updateStatus(linkID, status);
     }
 

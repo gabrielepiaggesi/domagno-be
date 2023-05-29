@@ -14,27 +14,38 @@ const ServerError_1 = require("../../utils/ServerError");
 const FileItemDTO_1 = require("../dtos/FileItemDTO");
 const FileStatus_enum_1 = require("../enums/FileStatus.enum");
 const Assignment_1 = require("../../utils/Assignment");
+const LinkService_1 = require("./LinkService");
+const linkService = new LinkService_1.LinkService();
 class FileService {
-    getFiles(assignmentId, token) {
+    getFiles(linkID, token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const phaseId = yield Assignment_1.Assignment.getPhase(assignmentId, token);
+            const link = yield linkService.getLinkByID(linkID, true);
+            if (!link)
+                throw new ServerError_1.ServerError('LINK_NOT_FOUND');
+            const phaseId = yield Assignment_1.Assignment.getPhase(link.assignmentId, token);
             if (phaseId != 2)
                 throw new ServerError_1.ServerError('WRONG_ASS_PHASE', null, 403);
-            const attachments = (yield Assignment_1.Assignment.getAttachments(assignmentId, token)) || [];
+            const attachments = (yield Assignment_1.Assignment.getAttachments(link.assignmentId, token)) || [];
             return attachments.filter(att => !att.isDeleted && [32, 33].includes(att.type.id)).map(att => this.transformObjToFileItem(att));
         });
     }
-    uploadFile(assignmentId, file, token) {
+    uploadFile(linkID, file, token) {
         return __awaiter(this, void 0, void 0, function* () {
+            const link = yield linkService.getLinkByID(linkID, true);
+            if (!link)
+                throw new ServerError_1.ServerError('LINK_NOT_FOUND');
             if (!file)
                 throw new ServerError_1.ServerError('MISSING_FILE');
-            const newAttachment = yield Assignment_1.Assignment.uploadAttachment(assignmentId, file, token);
+            const newAttachment = yield Assignment_1.Assignment.uploadAttachment(link.assignmentId, file, token);
             return this.transformObjToFileItem(newAttachment);
         });
     }
-    deleteFile(assignmentId, fileId, token) {
+    deleteFile(linkID, fileId, token) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Assignment_1.Assignment.removeAttachment(assignmentId, fileId, token);
+            const link = yield linkService.getLinkByID(linkID, true);
+            if (!link)
+                throw new ServerError_1.ServerError('LINK_NOT_FOUND');
+            return yield Assignment_1.Assignment.removeAttachment(link.assignmentId, fileId, token);
         });
     }
     transformObjToFileItem(fileObj) {

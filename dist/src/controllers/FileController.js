@@ -32,7 +32,7 @@ class FileController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const token = req.header('Authorization');
-                const response = yield fileService.getFiles(+req.params.assignmentId, token);
+                const response = yield fileService.getFiles(req.params.linkID, token);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -45,7 +45,7 @@ class FileController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const token = req.header('Authorization');
-                const response = yield fileService.uploadFile(+req.params.assignmentId, req.file, token);
+                const response = yield fileService.uploadFile(req.params.linkID, req.file, token);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -58,7 +58,7 @@ class FileController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const token = req.header('Authorization');
-                const response = yield fileService.deleteFile(+req.params.assignmentId, +req.params.fileId, token);
+                const response = yield fileService.deleteFile(req.params.linkID, +req.params.fileId, token);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -70,16 +70,16 @@ class FileController {
 }
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
-    (0, HttpMehtodDecorators_1.Path)("/list/:assignmentId")
+    (0, HttpMehtodDecorators_1.Path)("/list/:linkID")
 ], FileController.prototype, "getFiles", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Multer)({ multerConfig, type: 'single', path: 'file' }),
-    (0, HttpMehtodDecorators_1.Path)("/upload/:assignmentId")
+    (0, HttpMehtodDecorators_1.Path)("/upload/:linkID")
 ], FileController.prototype, "uploadFile", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Delete)(),
-    (0, HttpMehtodDecorators_1.Path)("/delete/:assignmentId/:fileId")
+    (0, HttpMehtodDecorators_1.Path)("/delete/:linkID/:fileId")
 ], FileController.prototype, "deleteFile", null);
 exports.FileController = FileController;
 //# sourceMappingURL=FileController.js.map

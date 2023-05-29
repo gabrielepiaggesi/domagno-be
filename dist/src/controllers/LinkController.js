@@ -60,7 +60,7 @@ class LinkController {
     saveLink(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield linkService.saveLink(+req.params.assignmentId);
+                const response = yield linkService.saveLink(+req.params.assignmentId, req.params.status || 'inactive');
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -134,7 +134,7 @@ __decorate([
 ], LinkController.prototype, "getLinkByAssignmentID", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
-    (0, HttpMehtodDecorators_1.Path)("/save/:assignmentId")
+    (0, HttpMehtodDecorators_1.Path)("/save/:assignmentId/:status?")
 ], LinkController.prototype, "saveLink", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
