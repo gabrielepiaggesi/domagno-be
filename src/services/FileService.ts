@@ -14,7 +14,7 @@ export class FileService implements FileApi {
         if (!link) throw new ServerError('LINK_NOT_FOUND');
 
         const phaseId = await Assignment.getPhase(link.assignmentId, token);
-        if (phaseId != 2) throw new ServerError('WRONG_ASS_PHASE', null, 403);
+        if (![5, 6].includes(phaseId)) throw new ServerError('WRONG_ASSIGNMENT_PHASE', null, 403);
 
         const attachments = await Assignment.getAttachments(link.assignmentId, token) || [];
         return attachments.filter(att => !att.isDeleted && [32,33].includes(att.type.id)).map(att => this.transformObjToFileItem(att));
