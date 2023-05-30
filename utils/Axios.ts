@@ -5,7 +5,7 @@ function getHeaders(token: string, contentType = 'application/json', extraHeader
     let h = { 'Content-Type': contentType };
     h["Accept-Language"] = "IT-IT";
     h["Authorization"] = token;
-    return { 'headers': extraHeaders ? { ...h, ...extraHeaders } : h };
+    return { 'headers': extraHeaders ? { ...h, ...extraHeaders } : h, maxContentLength: Infinity, maxBodyLength: Infinity };
 }
 
 function throwError(e: any): AxiosResponse {
