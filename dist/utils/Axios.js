@@ -19,7 +19,7 @@ function getHeaders(token, contentType = 'application/json', extraHeaders = null
     let h = { 'Content-Type': contentType };
     h["Accept-Language"] = "IT-IT";
     h["Authorization"] = token;
-    return { 'headers': extraHeaders ? Object.assign(Object.assign({}, h), extraHeaders) : h };
+    return { 'headers': extraHeaders ? Object.assign(Object.assign({}, h), extraHeaders) : h, maxContentLength: 10000000, maxBodyLength: 10000000 };
 }
 function throwError(e) {
     var _a, _b;
