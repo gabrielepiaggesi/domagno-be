@@ -14,11 +14,11 @@ export class SmsService implements SmsApi {
         if (!smsDto.numeroCellulare) throw new ServerError('PHONE_NUMBER_MISSING');
 
         const sms = new Sms();
-        sms.assignment_id = smsDto.idAssignment;
-        sms.contact_id = smsDto.idContatto;
-        sms.contact_name = smsDto.nomeContatto;
-        sms.phone_number = smsDto.numeroCellulare;
-        sms.sent_at = moment().format("YYYY-MM-DD HH:mm:ss");
+        sms.assignmentId = smsDto.idAssignment;
+        sms.contactId = smsDto.idContatto;
+        sms.contactName = smsDto.nomeContatto;
+        sms.phoneNumber = smsDto.numeroCellulare;
+        sms.sentAt = moment().format("YYYY-MM-DD HH:mm:ss");
         const smsInserted = await smsRepository.save(sms);
         sms._id = smsInserted.insertedId;
 
@@ -27,12 +27,12 @@ export class SmsService implements SmsApi {
     }
     
     public async getSmsSentByAssignmentId(assignmentId: number) {
-        const smsListFound = await smsRepository.findAnyByKeyValue("assignment_id", assignmentId);
+        const smsListFound = await smsRepository.findAnyByKeyValue("assignmentId", assignmentId);
         return smsListFound.map(this.trasformSmsToSmsDTO);
     }
 
     private trasformSmsToSmsDTO(sms: Sms): SmsDTO {
-        return new SmsDTO(sms.assignment_id, sms.contact_id, sms.contact_name, sms.phone_number, sms.sent_at, sms._id);
+        return new SmsDTO(sms.assignmentId, sms.contactId, sms.contactName, sms.phoneNumber, sms.sentAt, sms._id);
     }
 
 }
