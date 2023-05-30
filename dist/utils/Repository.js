@@ -15,7 +15,7 @@ const Db_1 = require("./Db");
 class Repository {
     save(model) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Db_1.db.collection(this.collection).insertOne(Object.assign(Object.assign({}, model), { app: 'self-shooting' }));
+            return yield Db_1.db.collection(this.collection).insertOne(this.modelName ? Object.assign(Object.assign({}, model), { app: 'self-shooting', model: this.modelName }) : Object.assign(Object.assign({}, model), { app: 'self-shooting' }));
         });
     }
     delete(id) {
@@ -35,12 +35,12 @@ class Repository {
     }
     findAnyByKeyValue(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Db_1.db.collection(this.collection).find({ [key]: value }).toArray();
+            return yield Db_1.db.collection(this.collection).find(this.modelName ? { [key]: value, model: this.modelName } : { [key]: value }).toArray();
         });
     }
     findOneByKeyValue(key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Db_1.db.collection(this.collection).findOne({ [key]: value });
+            return yield Db_1.db.collection(this.collection).findOne(this.modelName ? { [key]: value, model: this.modelName } : { [key]: value });
         });
     }
 }

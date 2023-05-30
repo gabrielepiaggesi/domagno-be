@@ -17,6 +17,7 @@ class LinkRepository extends Repository_1.Repository {
     constructor() {
         super(...arguments);
         this.collection = "Documenti";
+        this.modelName = 'Link';
     }
     updateStatus(id, status) {
         return __awaiter(this, void 0, void 0, function* () {

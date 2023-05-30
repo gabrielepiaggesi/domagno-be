@@ -57,7 +57,7 @@ class Assignment {
     }
     static toggleAttesa(assignmentId, inAttesa, token) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Axios_1.Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "Self-Shooting LINK" });
+            return yield Axios_1.Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "In attesa di integrazione fotografica/documentale" });
         });
     }
     static removeAttachment(assignmentId, fileId, token) {

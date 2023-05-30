@@ -40,7 +40,7 @@ export class Assignment {
     }
 
     static async toggleAttesa(assignmentId: number, inAttesa: boolean, token: string): Promise<any> {
-        return await Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "Self-Shooting LINK" });
+        return await Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "In attesa di integrazione fotografica/documentale" });
     }
 
     static async removeAttachment(assignmentId: number, fileId: number, token: string): Promise<any> {
