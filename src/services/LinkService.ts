@@ -29,7 +29,7 @@ export class LinkService implements LinkApi {
         return link;
     }
     
-    public async saveLink(assignmentId: number, status: LinkStatus = 'inactive') {
+    public async saveLink(assignmentId: number, status: LinkStatus = 'inactive', text: string|null = null) {
         const equalLink = await this.getLinkByAssignmentID(assignmentId);
         if (equalLink) {
             LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
@@ -42,6 +42,7 @@ export class LinkService implements LinkApi {
         newLink.uuid = RandomID.generate();
         newLink.status = status;
         newLink.assignmentId = assignmentId;
+        if (text) newLink.text = text;
         const linkSaved = await linkRepository.save(newLink);
         newLink._id = linkSaved.insertedId;
 

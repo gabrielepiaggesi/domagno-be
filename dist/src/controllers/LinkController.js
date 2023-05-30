@@ -58,9 +58,11 @@ class LinkController {
         });
     }
     saveLink(res, req) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield linkService.saveLink(+req.params.assignmentId, req.params.status || 'inactive');
+                const linkText = (_a = req.body) === null || _a === void 0 ? void 0 : _a.text;
+                const response = yield linkService.saveLink(+req.params.assignmentId, req.params.status || 'inactive', linkText);
                 return res.status(200).json(response);
             }
             catch (e) {

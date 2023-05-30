@@ -42,7 +42,7 @@ class LinkService {
             return link;
         });
     }
-    saveLink(assignmentId, status = 'inactive') {
+    saveLink(assignmentId, status = 'inactive', text = null) {
         return __awaiter(this, void 0, void 0, function* () {
             const equalLink = yield this.getLinkByAssignmentID(assignmentId);
             if (equalLink) {
@@ -55,6 +55,8 @@ class LinkService {
             newLink.uuid = RandomID_1.RandomID.generate();
             newLink.status = status;
             newLink.assignmentId = assignmentId;
+            if (text)
+                newLink.text = text;
             const linkSaved = yield linkRepository.save(newLink);
             newLink._id = linkSaved.insertedId;
             Log_1.LOG.success('New link saved', newLink.uuid, newLink._id);

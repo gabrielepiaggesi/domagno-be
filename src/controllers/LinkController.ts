@@ -48,7 +48,8 @@ export class LinkController implements LinkApi {
     @Path("/save/:assignmentId/:status?")
     public async saveLink(res: Response, req) {
         try {
-            const response = await linkService.saveLink(+req.params.assignmentId, req.params.status || 'inactive');
+            const linkText = req.body?.text;
+            const response = await linkService.saveLink(+req.params.assignmentId, req.params.status || 'inactive', linkText);
             return res.status(200).json(response);
         } catch(e) {
             LOG.error(e);
