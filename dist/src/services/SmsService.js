@@ -26,11 +26,11 @@ class SmsService {
             if (!smsDto.numeroCellulare)
                 throw new ServerError_1.ServerError('PHONE_NUMBER_MISSING');
             const sms = new Sms_1.Sms();
-            sms.assignment_id = smsDto.idAssignment;
-            sms.contact_id = smsDto.idContatto;
-            sms.contact_name = smsDto.nomeContatto;
-            sms.phone_number = smsDto.numeroCellulare;
-            sms.sent_at = (0, moment_1.default)().format("YYYY-MM-DD HH:mm:ss");
+            sms.assignmentId = smsDto.idAssignment;
+            sms.contactId = smsDto.idContatto;
+            sms.contactName = smsDto.nomeContatto;
+            sms.phoneNumber = smsDto.numeroCellulare;
+            sms.sentAt = (0, moment_1.default)().format("YYYY-MM-DD HH:mm:ss");
             const smsInserted = yield smsRepository.save(sms);
             sms._id = smsInserted.insertedId;
             Log_1.LOG.success("NEW SMS SAVED", sms._id);
@@ -39,12 +39,12 @@ class SmsService {
     }
     getSmsSentByAssignmentId(assignmentId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const smsListFound = yield smsRepository.findAnyByKeyValue("assignment_id", assignmentId);
+            const smsListFound = yield smsRepository.findAnyByKeyValue("assignmentId", assignmentId);
             return smsListFound.map(this.trasformSmsToSmsDTO);
         });
     }
     trasformSmsToSmsDTO(sms) {
-        return new SmsDTO_1.SmsDTO(sms.assignment_id, sms.contact_id, sms.contact_name, sms.phone_number, sms.sent_at, sms._id);
+        return new SmsDTO_1.SmsDTO(sms.assignmentId, sms.contactId, sms.contactName, sms.phoneNumber, sms.sentAt, sms._id);
     }
 }
 exports.SmsService = SmsService;

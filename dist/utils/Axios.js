@@ -36,9 +36,9 @@ class Axios {
             return (yield axios_1.default.post(endpoint, body, getHeaders(token, contentType, extraHeaders)).catch(e => throwError(e))).data;
         });
     }
-    static delete(token, endpoint, body = null, contentType = 'application/json') {
+    static delete(token, endpoint, contentType = 'application/json') {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield axios_1.default.post(endpoint, body, getHeaders(token, contentType)).catch(e => throwError(e))).data;
+            return (yield axios_1.default.delete(endpoint, getHeaders(token, contentType)).catch(e => throwError(e))).data;
         });
     }
     static put(token, endpoint, body, contentType = 'application/json') {

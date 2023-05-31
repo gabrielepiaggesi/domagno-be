@@ -21,8 +21,8 @@ export class Axios {
         return (await axios.post(endpoint, body, getHeaders(token, contentType, extraHeaders)).catch(e => throwError(e))).data;
     }
     
-    static async delete(token: string, endpoint: string, body: any = null, contentType = 'application/json') {
-        return (await axios.post(endpoint, body, getHeaders(token, contentType)).catch(e => throwError(e))).data;
+    static async delete(token: string, endpoint: string, contentType = 'application/json') {
+        return (await axios.delete(endpoint, getHeaders(token, contentType)).catch(e => throwError(e))).data;
     }
     
     static async put(token: string, endpoint: string, body: any, contentType = 'application/json') {

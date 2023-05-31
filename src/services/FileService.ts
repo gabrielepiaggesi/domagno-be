@@ -4,6 +4,7 @@ import { FileItemDTO } from "../dtos/FileItemDTO";
 import { FileStatus } from "../enums/FileStatus.enum";
 import { Assignment } from "../../utils/Assignment";
 import { LinkService } from "./LinkService";
+import { LOG } from "../../utils/Log";
 
 const linkService = new LinkService();
 
@@ -33,6 +34,7 @@ export class FileService implements FileApi {
         const link = await linkService.getLinkByID(linkID, true);
         if (!link) throw new ServerError('LINK_NOT_FOUND');
     
+        LOG.success("DELETING FILE", linkID);
         return await Assignment.removeAttachment(link.assignmentId, fileId, token);
     }
 

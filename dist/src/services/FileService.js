@@ -15,6 +15,7 @@ const FileItemDTO_1 = require("../dtos/FileItemDTO");
 const FileStatus_enum_1 = require("../enums/FileStatus.enum");
 const Assignment_1 = require("../../utils/Assignment");
 const LinkService_1 = require("./LinkService");
+const Log_1 = require("../../utils/Log");
 const linkService = new LinkService_1.LinkService();
 class FileService {
     getFiles(linkID, token) {
@@ -45,6 +46,7 @@ class FileService {
             const link = yield linkService.getLinkByID(linkID, true);
             if (!link)
                 throw new ServerError_1.ServerError('LINK_NOT_FOUND');
+            Log_1.LOG.success("DELETING FILE", linkID);
             return yield Assignment_1.Assignment.removeAttachment(link.assignmentId, fileId, token);
         });
     }
