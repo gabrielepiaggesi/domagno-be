@@ -24,6 +24,11 @@ class LinkRepository extends Repository_1.Repository {
             return yield Db_1.db.collection(this.collection).updateOne({ _id: new mongodb_1.ObjectID(id) }, { $set: { status } });
         });
     }
+    updateText(id, text) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Db_1.db.collection(this.collection).updateOne({ _id: new mongodb_1.ObjectID(id) }, { $set: { text } });
+        });
+    }
 }
 exports.LinkRepository = LinkRepository;
 //# sourceMappingURL=LinkRepository.js.map

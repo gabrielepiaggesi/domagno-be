@@ -10,4 +10,8 @@ export class LinkRepository extends Repository<Link> {
     public async updateStatus(id: number|string, status: string) {
         return await db.collection(this.collection).updateOne({ _id: new ObjectID(id) }, { $set: { status } });
     }
+
+    public async updateText(id: number|string, text: string) {
+        return await db.collection(this.collection).updateOne({ _id: new ObjectID(id) }, { $set: { text } });
+    }
 }

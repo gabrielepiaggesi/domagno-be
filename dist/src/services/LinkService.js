@@ -46,7 +46,10 @@ class LinkService {
         return __awaiter(this, void 0, void 0, function* () {
             const equalLink = yield this.getLinkByAssignmentID(assignmentId);
             if (equalLink) {
+                if (text && text != equalLink.text)
+                    yield linkRepository.updateText(equalLink._id, text);
                 Log_1.LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
+                equalLink.text = text || equalLink.text;
                 return equalLink;
             }
             if (!['active', 'inactive'].includes(status))

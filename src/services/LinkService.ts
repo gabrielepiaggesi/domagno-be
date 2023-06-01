@@ -32,7 +32,9 @@ export class LinkService implements LinkApi {
     public async saveLink(assignmentId: number, status: LinkStatus = 'inactive', text: string|null = null) {
         const equalLink = await this.getLinkByAssignmentID(assignmentId);
         if (equalLink) {
+            if (text && text != equalLink.text) await linkRepository.updateText(equalLink._id, text);
             LOG.warn('Cannot save link, returning equal one', assignmentId, equalLink._id);
+            equalLink.text = text || equalLink.text;
             return equalLink;
         }
 
