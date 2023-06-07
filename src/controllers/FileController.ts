@@ -42,6 +42,20 @@ export class FileController implements FileApi {
         }
     }
 
+    @Post()
+    @Multer({ multerConfig, type: 'single', path: 'file' })
+    @Path("/save/:assignmentId")
+    public async saveFile(res: Response, req) {
+        try {
+            console.log(req.file);
+            const response = await fileService.saveFile(req.file, +req.params.assignmentId);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'File.saveFile.Error'});
+        }
+    }
+
     @Delete()
     @Path("/delete/:linkID/:fileId")
     public async deleteFile(res: Response, req) {

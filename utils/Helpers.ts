@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 import moment from "moment";
 import multer from "multer";
+import { MulterFile } from "../src/types/MulterFile";
 
 export function routeFromController(object: any): Router {
     const route = express.Router();
@@ -28,10 +29,10 @@ export function routeFromController(object: any): Router {
     return route;
 }
 
-export function getFileNameAndExtension(file: any, externalId = null) {
-    const fileName = file.originalname.replaceAll(/\s/g,'').split('.')[0];
-    const fileExtension = file.originalname.replaceAll(/\s/g,'').split('.')[1];
-    const uniqueFileName = fileName + '_' + (externalId ? externalId + '_' : '') + moment().valueOf() + '.' + fileExtension;
+export function getMulterFileNameAndExtension(multerFile: MulterFile, externalId = null) {
+    const parsedFileName = multerFile.originalname.replaceAll(/\s/g,'').split('.')[0];
+    const fileExtension = multerFile.originalname.replaceAll(/\s/g,'').split('.')[1];
+    const fileName = parsedFileName + '_' + (externalId ? externalId + '_' : '') + moment().valueOf() + '.' + fileExtension;
 
-    return { name: uniqueFileName, extension: fileExtension };
+    return { fileName, fileExtension };
 }

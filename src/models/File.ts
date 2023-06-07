@@ -1,4 +1,5 @@
 import { Model } from "../../utils/Model";
+import { InsoorePlatform } from "../types/InsoorePlatform";
 
 export class File extends Model {
     name: string;
@@ -6,6 +7,5 @@ export class File extends Model {
     extension: string;
     url: string;
     originalName: string;
-    forPlatform?: string;
-    platformInternalId?: number;
+    assignmentId?: number;
 }

@@ -1,19 +1,18 @@
 import { Axios } from "./Axios";
 import FormData from 'form-data';
-import moment from 'moment';
 import config from 'config';
+import { getMulterFileNameAndExtension } from "./Helpers";
+import { MulterFile } from "../src/types/MulterFile";
 
 export class Assignment {
     private static readonly ASSIGNMENT_URL = config.get('ASSIGNMENT_URL');
 
-    static async uploadAttachment(assignmentId: number, file: any, token: string): Promise<any> {
+    static async uploadAttachment(assignmentId: number, multerFile: MulterFile, token: string): Promise<any> {
         const formData = new FormData();
-        const fileName = file.originalname.replaceAll(/\s/g,'').split('.')[0];
-        const fileExtension = file.originalname.replaceAll(/\s/g,'').split('.')[1];
-        const uniqueFileName = fileName + '_' + assignmentId + '_' + moment().valueOf() + '.' + fileExtension;
-        formData.append("fileData", file.buffer, uniqueFileName);
-        formData.append("Type", file.mimetype.includes('image') ? '33' : '32');
-        formData.append("Name", uniqueFileName);
+        const { fileName } = getMulterFileNameAndExtension(multerFile, assignmentId);
+        formData.append("fileData", multerFile.buffer, fileName);
+        formData.append("Type", multerFile.mimetype.includes('image') ? '33' : '32');
+        formData.append("Name", fileName);
         formData.append("Description", "");
 
         const uploadEndpoint = this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments`;

@@ -1,0 +1,1 @@
+export type InsoorePlatform = 'assignment'|'insoore-for-brokers'|'self-shooting'|'self-booking';

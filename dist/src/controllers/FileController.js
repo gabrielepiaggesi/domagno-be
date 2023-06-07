@@ -54,6 +54,19 @@ class FileController {
             }
         });
     }
+    saveFile(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log(req.file);
+                const response = yield fileService.saveFile(req.file, req.params.forPlatform, +req.params.platformInternalId);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'File.saveFile.Error' }));
+            }
+        });
+    }
     deleteFile(res, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -77,6 +90,11 @@ __decorate([
     (0, HttpMehtodDecorators_1.Multer)({ multerConfig, type: 'single', path: 'file' }),
     (0, HttpMehtodDecorators_1.Path)("/upload/:linkID")
 ], FileController.prototype, "uploadFile", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Multer)({ multerConfig, type: 'single', path: 'file' }),
+    (0, HttpMehtodDecorators_1.Path)("/save/:forPlatform/:platformInternalId")
+], FileController.prototype, "saveFile", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Delete)(),
     (0, HttpMehtodDecorators_1.Path)("/delete/:linkID/:fileId")

@@ -16,7 +16,12 @@ const FileStatus_enum_1 = require("../enums/FileStatus.enum");
 const Assignment_1 = require("../../utils/Assignment");
 const LinkService_1 = require("./LinkService");
 const Log_1 = require("../../utils/Log");
+const File_1 = require("../models/File");
+const Helpers_1 = require("../../utils/Helpers");
+const FileRepository_1 = require("../repositories/FileRepository");
+const AzureStorage_1 = require("../../utils/AzureStorage");
 const linkService = new LinkService_1.LinkService();
+const fileRepository = new FileRepository_1.FileRepository();
 class FileService {
     getFiles(linkID, token) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -30,14 +35,15 @@ class FileService {
             return attachments.filter(att => !att.isDeleted && [32, 33].includes(att.type.id)).map(att => this.transformObjToFileItem(att));
         });
     }
-    uploadFile(linkID, file, token) {
+    uploadFile(linkID, multerFile, token) {
         return __awaiter(this, void 0, void 0, function* () {
             const link = yield linkService.getLinkByID(linkID, true);
             if (!link)
                 throw new ServerError_1.ServerError('LINK_NOT_FOUND');
-            if (!file)
+            if (!multerFile)
                 throw new ServerError_1.ServerError('MISSING_FILE');
-            const newAttachment = yield Assignment_1.Assignment.uploadAttachment(link.assignmentId, file, token);
+            yield this.saveFile(multerFile, 'assignment', link.assignmentId);
+            const newAttachment = yield Assignment_1.Assignment.uploadAttachment(link.assignmentId, multerFile, token);
             return this.transformObjToFileItem(newAttachment);
         });
     }
@@ -48,6 +54,26 @@ class FileService {
                 throw new ServerError_1.ServerError('LINK_NOT_FOUND');
             Log_1.LOG.success("DELETING FILE", linkID);
             return yield Assignment_1.Assignment.removeAttachment(link.assignmentId, fileId, token);
+        });
+    }
+    saveFile(multerFile, forPlatform, platformInternalId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!multerFile)
+                throw new ServerError_1.ServerError('MISSING_FILE');
+            const { fileName, fileExtension } = (0, Helpers_1.getMulterFileNameAndExtension)(multerFile, platformInternalId);
+            const azureBlobUrl = yield AzureStorage_1.AzureStorage.uploadFileBuffer(multerFile, fileName, platformInternalId);
+            const file = new File_1.File();
+            file.originalName = multerFile.originalname;
+            file.size = multerFile.size;
+            file.name = fileName;
+            file.extension = fileExtension;
+            file.forPlatform = forPlatform;
+            file.url = azureBlobUrl;
+            file.platformInternalId = platformInternalId;
+            const fileSaved = yield fileRepository.save(file);
+            file._id = fileSaved.insertedId;
+            Log_1.LOG.success("NEW FILE SAVED", file._id);
+            return file;
         });
     }
     transformObjToFileItem(fileObj) {

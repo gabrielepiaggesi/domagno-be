@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.routeFromController = void 0;
+exports.getMulterFileNameAndExtension = exports.routeFromController = void 0;
 const express_1 = __importDefault(require("express"));
+const moment_1 = __importDefault(require("moment"));
 const multer_1 = __importDefault(require("multer"));
 function routeFromController(object) {
     const route = express_1.default.Router();
@@ -41,4 +42,11 @@ function routeFromController(object) {
     return route;
 }
 exports.routeFromController = routeFromController;
+function getMulterFileNameAndExtension(multerFile, externalId = null) {
+    const parsedFileName = multerFile.originalname.replaceAll(/\s/g, '').split('.')[0];
+    const fileExtension = multerFile.originalname.replaceAll(/\s/g, '').split('.')[1];
+    const fileName = parsedFileName + '_' + (externalId ? externalId + '_' : '') + (0, moment_1.default)().valueOf() + '.' + fileExtension;
+    return { fileName, fileExtension };
+}
+exports.getMulterFileNameAndExtension = getMulterFileNameAndExtension;
 //# sourceMappingURL=Helpers.js.map

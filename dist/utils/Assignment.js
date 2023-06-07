@@ -15,18 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assignment = void 0;
 const Axios_1 = require("./Axios");
 const form_data_1 = __importDefault(require("form-data"));
-const moment_1 = __importDefault(require("moment"));
 const config_1 = __importDefault(require("config"));
+const Helpers_1 = require("./Helpers");
 class Assignment {
-    static uploadAttachment(assignmentId, file, token) {
+    static uploadAttachment(assignmentId, multerFile, token) {
         return __awaiter(this, void 0, void 0, function* () {
             const formData = new form_data_1.default();
-            const fileName = file.originalname.replaceAll(/\s/g, '').split('.')[0];
-            const fileExtension = file.originalname.replaceAll(/\s/g, '').split('.')[1];
-            const uniqueFileName = fileName + '_' + assignmentId + '_' + (0, moment_1.default)().valueOf() + '.' + fileExtension;
-            formData.append("fileData", file.buffer, uniqueFileName);
-            formData.append("Type", file.mimetype.includes('image') ? '33' : '32');
-            formData.append("Name", uniqueFileName);
+            const { fileName } = (0, Helpers_1.getMulterFileNameAndExtension)(multerFile, assignmentId);
+            formData.append("fileData", multerFile.buffer, fileName);
+            formData.append("Type", multerFile.mimetype.includes('image') ? '33' : '32');
+            formData.append("Name", fileName);
             formData.append("Description", "");
             const uploadEndpoint = this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments`;
             const res = yield Axios_1.Axios.post(token, uploadEndpoint, formData, 'multipart/form-data', formData.getHeaders());
