@@ -58,7 +58,7 @@ class FileController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log(req.file);
-                const response = yield fileService.saveFile(req.file, req.params.forPlatform, +req.params.platformInternalId);
+                const response = yield fileService.saveFile(req.file, +req.params.assignmentId);
                 return res.status(200).json(response);
             }
             catch (e) {
@@ -93,7 +93,7 @@ __decorate([
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Multer)({ multerConfig, type: 'single', path: 'file' }),
-    (0, HttpMehtodDecorators_1.Path)("/save/:forPlatform/:platformInternalId")
+    (0, HttpMehtodDecorators_1.Path)("/save/:assignmentId")
 ], FileController.prototype, "saveFile", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Delete)(),

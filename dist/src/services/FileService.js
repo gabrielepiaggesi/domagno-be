@@ -42,7 +42,7 @@ class FileService {
                 throw new ServerError_1.ServerError('LINK_NOT_FOUND');
             if (!multerFile)
                 throw new ServerError_1.ServerError('MISSING_FILE');
-            yield this.saveFile(multerFile, 'assignment', link.assignmentId);
+            yield this.saveFile(multerFile, link.assignmentId);
             const newAttachment = yield Assignment_1.Assignment.uploadAttachment(link.assignmentId, multerFile, token);
             return this.transformObjToFileItem(newAttachment);
         });
@@ -56,20 +56,20 @@ class FileService {
             return yield Assignment_1.Assignment.removeAttachment(link.assignmentId, fileId, token);
         });
     }
-    saveFile(multerFile, forPlatform, platformInternalId) {
+    saveFile(multerFile, assignmentId) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!multerFile)
                 throw new ServerError_1.ServerError('MISSING_FILE');
-            const { fileName, fileExtension } = (0, Helpers_1.getMulterFileNameAndExtension)(multerFile, platformInternalId);
-            const azureBlobUrl = yield AzureStorage_1.AzureStorage.uploadFileBuffer(multerFile, fileName, platformInternalId);
+            const { fileName, fileExtension } = (0, Helpers_1.getMulterFileNameAndExtension)(multerFile, assignmentId);
+            const azureBlobUrl = yield AzureStorage_1.AzureStorage.uploadFileBuffer(multerFile, fileName, assignmentId);
             const file = new File_1.File();
             file.originalName = multerFile.originalname;
+            file.mimeType = multerFile.mimetype;
+            file.extension = fileExtension;
             file.size = multerFile.size;
             file.name = fileName;
-            file.extension = fileExtension;
-            file.forPlatform = forPlatform;
             file.url = azureBlobUrl;
-            file.platformInternalId = platformInternalId;
+            file.assignmentId = assignmentId;
             const fileSaved = yield fileRepository.save(file);
             file._id = fileSaved.insertedId;
             Log_1.LOG.success("NEW FILE SAVED", file._id);
