@@ -52,15 +52,16 @@ export class FileService implements FileApi {
 
         const file = new File();
         file.originalName = multerFile.originalname;
+        file.mimeType = multerFile.mimetype;
+        file.extension = fileExtension;
         file.size = multerFile.size;
         file.name = fileName;
-        file.extension = fileExtension;
         file.url = azureBlobUrl;
         file.assignmentId = assignmentId;
         const fileSaved = await fileRepository.save(file);
+        
         file._id = fileSaved.insertedId;
         LOG.success("NEW FILE SAVED", file._id);
-
         return file;
     }
 

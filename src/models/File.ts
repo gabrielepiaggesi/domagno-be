@@ -7,5 +7,6 @@ export class File extends Model {
     extension: string;
     url: string;
     originalName: string;
+    mimeType: string;
     assignmentId?: number;
 }
