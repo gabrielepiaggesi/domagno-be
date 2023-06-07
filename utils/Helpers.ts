@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import moment from "moment";
 import multer from "multer";
 
 export function routeFromController(object: any): Router {
@@ -25,4 +26,12 @@ export function routeFromController(object: any): Router {
         if (method === "PATCH") route.patch(path, async (req, res) => await object[fn](res, req));
     });
     return route;
+}
+
+export function getFileNameAndExtension(file: any, externalId = null) {
+    const fileName = file.originalname.replaceAll(/\s/g,'').split('.')[0];
+    const fileExtension = file.originalname.replaceAll(/\s/g,'').split('.')[1];
+    const uniqueFileName = fileName + '_' + (externalId ? externalId + '_' : '') + moment().valueOf() + '.' + fileExtension;
+
+    return { name: uniqueFileName, extension: fileExtension };
 }
