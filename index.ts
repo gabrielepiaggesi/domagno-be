@@ -9,8 +9,7 @@ import config from 'config';
 // connectToDatabase();
 
 const app = express();
-// const port = process.env.PORT || 4200;
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(bodyParser.json());
