@@ -15,10 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Axios = void 0;
 const axios_1 = __importDefault(require("axios"));
 const ServerError_1 = require("./ServerError");
-function getHeaders(token, contentType = 'application/json', extraHeaders = null) {
+function getHeaders(contentType = 'application/json', extraHeaders = null) {
     let h = { 'Content-Type': contentType };
     h["Accept-Language"] = "IT-IT";
-    h["Authorization"] = token;
     return { 'headers': extraHeaders ? Object.assign(Object.assign({}, h), extraHeaders) : h, maxContentLength: 10000000, maxBodyLength: 10000000 };
 }
 function throwError(e) {
@@ -26,24 +25,24 @@ function throwError(e) {
     throw new ServerError_1.ServerError('AXIOS_ERR', (_a = e.response) === null || _a === void 0 ? void 0 : _a.statusText, (_b = e.response) === null || _b === void 0 ? void 0 : _b.status, e);
 }
 class Axios {
-    static get(token, endpoint, contentType = 'application/json') {
+    static get(endpoint, contentType = 'application/json') {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield axios_1.default.get(endpoint, getHeaders(token, contentType)).catch(e => throwError(e))).data;
+            return (yield axios_1.default.get(endpoint, getHeaders(contentType)).catch(e => throwError(e))).data;
         });
     }
-    static post(token, endpoint, body, contentType = 'application/json', extraHeaders = null) {
+    static post(endpoint, body, contentType = 'application/json', extraHeaders = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield axios_1.default.post(endpoint, body, getHeaders(token, contentType, extraHeaders)).catch(e => throwError(e))).data;
+            return (yield axios_1.default.post(endpoint, body, getHeaders(contentType, extraHeaders)).catch(e => throwError(e))).data;
         });
     }
-    static delete(token, endpoint, contentType = 'application/json') {
+    static delete(endpoint, contentType = 'application/json') {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield axios_1.default.delete(endpoint, getHeaders(token, contentType)).catch(e => throwError(e))).data;
+            return (yield axios_1.default.delete(endpoint, getHeaders(contentType)).catch(e => throwError(e))).data;
         });
     }
-    static put(token, endpoint, body, contentType = 'application/json') {
+    static put(endpoint, body, contentType = 'application/json') {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield axios_1.default.put(endpoint, body, getHeaders(token, contentType)).catch(e => throwError(e))).data;
+            return (yield axios_1.default.put(endpoint, body, getHeaders(contentType)).catch(e => throwError(e))).data;
         });
     }
 }

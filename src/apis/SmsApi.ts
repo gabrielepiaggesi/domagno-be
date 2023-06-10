@@ -1,4 +1,3 @@
-export interface SmsApi {
-    sendSms(...args);
-    getSmsSentByAssignmentId(...args);
+export interface PlaceApi {
+    getNearByRestaurants(...args);
 }

@@ -1,69 +1,40 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Assignment = void 0;
-const Axios_1 = require("./Axios");
-const form_data_1 = __importDefault(require("form-data"));
-const config_1 = __importDefault(require("config"));
-const Helpers_1 = require("./Helpers");
-class Assignment {
-    static uploadAttachment(assignmentId, multerFile, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const formData = new form_data_1.default();
-            const { fileName } = (0, Helpers_1.getMulterFileNameAndExtension)(multerFile, assignmentId);
-            formData.append("fileData", multerFile.buffer, fileName);
-            formData.append("Type", multerFile.mimetype.includes('image') ? '33' : '32');
-            formData.append("Name", fileName);
-            formData.append("Description", "");
-            const uploadEndpoint = this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments`;
-            const res = yield Axios_1.Axios.post(token, uploadEndpoint, formData, 'multipart/form-data', formData.getHeaders());
-            const resData = res.data;
-            const uploadedFile = resData === null || resData === void 0 ? void 0 : resData.createdAttachment;
-            return uploadedFile;
-        });
-    }
-    static getAttachments(assignmentId, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const filesRes = yield Axios_1.Axios.get(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments`);
-            return filesRes === null || filesRes === void 0 ? void 0 : filesRes.data;
-        });
-    }
-    static getPhase(assignmentId, token) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            const assignmentData = yield Axios_1.Axios.get(token, this.ASSIGNMENT_URL + `Assignments/${assignmentId}`);
-            const workFlowInfo = assignmentData.workflowInfo;
-            const phaseId = (_a = workFlowInfo === null || workFlowInfo === void 0 ? void 0 : workFlowInfo.phase) === null || _a === void 0 ? void 0 : _a.id;
-            return phaseId;
-        });
-    }
-    static firePerizia(assignmentId, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield Axios_1.Axios.post(token, this.ASSIGNMENT_URL + `Assignments/${assignmentId}/fire`, { trigger: 15 });
-        });
-    }
-    static toggleAttesa(assignmentId, inAttesa, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield Axios_1.Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "In attesa di integrazione fotografica/documentale" });
-        });
-    }
-    static removeAttachment(assignmentId, fileId, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield Axios_1.Axios.delete(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments/${fileId}`);
-        });
-    }
-}
-Assignment.ASSIGNMENT_URL = config_1.default.get('ASSIGNMENT_URL');
-exports.Assignment = Assignment;
+// import { Axios } from "./Axios";
+// import FormData from 'form-data';
+// import config from 'config';
+// import { getMulterFileNameAndExtension } from "./Helpers";
+// export class Assignment {
+//     private static readonly ASSIGNMENT_URL = config.get('ASSIGNMENT_URL');
+//     static async uploadAttachment(assignmentId: number, multerFile: MulterFile, token: string): Promise<any> {
+//         const formData = new FormData();
+//         const { fileName } = getMulterFileNameAndExtension(multerFile, assignmentId);
+//         formData.append("fileData", multerFile.buffer, fileName);
+//         formData.append("Type", multerFile.mimetype.includes('image') ? '33' : '32');
+//         formData.append("Name", fileName);
+//         formData.append("Description", "");
+//         const uploadEndpoint = this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments`;
+//         const res = await Axios.post(token, uploadEndpoint, formData, 'multipart/form-data', formData.getHeaders());
+//         const resData = res.data;
+//         const uploadedFile = resData?.createdAttachment;
+//         return uploadedFile;
+//     }
+//     static async getAttachments(assignmentId: number, token: string): Promise<any[]> {
+//         const filesRes = await Axios.get(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments`);
+//         return filesRes?.data;
+//     }
+//     static async getPhase(assignmentId: number, token: string): Promise<number> {
+//         const assignmentData = await Axios.get(token, this.ASSIGNMENT_URL + `Assignments/${assignmentId}`);
+//         const workFlowInfo = assignmentData.workflowInfo;
+//         const phaseId = workFlowInfo?.phase?.id;
+//         return phaseId;
+//     }
+//     static async firePerizia(assignmentId: number, token: string): Promise<any> {
+//         return await Axios.post(token, this.ASSIGNMENT_URL + `Assignments/${assignmentId}/fire`, { trigger: 15 });
+//     }
+//     static async toggleAttesa(assignmentId: number, inAttesa: boolean, token: string): Promise<any> {
+//         return await Axios.put(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/${inAttesa ? 'inattesa' : 'inlavorazione'}`, { motivazioneAttesaId: 12, notes: "In attesa di integrazione fotografica/documentale" });
+//     }
+//     static async removeAttachment(assignmentId: number, fileId: number, token: string): Promise<any> {
+//         return await Axios.delete(token, this.ASSIGNMENT_URL + `assignments/${assignmentId}/attachments/${fileId}`);
+//     }
+// }
 //# sourceMappingURL=Assignment.js.map

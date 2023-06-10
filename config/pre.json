@@ -1,8 +1,0 @@
-{
-  "PORT": "8080",
-  "ENV": "pre",
-  "DB_URI": "mongodb://insoore-test:K5F96f6G9ZLO1tNEn9ix5xQb088Gw9jTS6KZ23BaA3HNklBXlsakTku3kx9MoeWyJ81AP24TU6rwXo7yP9GfWg==@insoore-test.documents.azure.com:10255/?ssl=true&replicaSet=events-dev",
-  "DB_NAME": "insoore",
-  "ASSIGNMENT_URL": "http://whoosnapinsurancetest2.westeurope.cloudapp.azure.com:8254/api/v1/",
-  "AZURE_STORAGE_ACCOUNT_ACCESS_KEY": "exFoN9OPc1LnkLTM0ckD9cz3VIoVxZnNQQ2owF39C6kUXoZjUEyOBa1xr6an00Of5j7+1ki/ql73hyOQ7TfDMw=="
-}
