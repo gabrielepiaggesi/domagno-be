@@ -5,5 +5,5 @@ export class Sms extends Model {
     contactId: number;
     contactName: string;
     phoneNumber: string;
-    sentAt: string;
+    sentAtt: string;
 }
