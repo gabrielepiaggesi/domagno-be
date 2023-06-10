@@ -1,7 +1,7 @@
 {
   "name": "do-magno",
   "version": "1.0.0",
-  "description": "nodejs backend for do-magno",
+  "description": "nodejs backend for do-magno project",
   "main": "dist/index.js",
   "scripts": {
     "start": "node ./dist/index.js",
