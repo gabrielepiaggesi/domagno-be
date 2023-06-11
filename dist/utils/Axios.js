@@ -17,7 +17,6 @@ const axios_1 = __importDefault(require("axios"));
 const ServerError_1 = require("./ServerError");
 function getHeaders(contentType = 'application/json', extraHeaders = null) {
     let h = { 'Content-Type': contentType ? contentType : 'application/json' };
-    h["Accept-Language"] = "IT-IT";
     return { 'headers': extraHeaders ? Object.assign(Object.assign({}, h), extraHeaders) : h };
 }
 function throwError(e) {

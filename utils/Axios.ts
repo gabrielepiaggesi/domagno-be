@@ -3,7 +3,6 @@ import { ServerError } from './ServerError';
 
 function getHeaders(contentType = 'application/json', extraHeaders: any = null) {
     let h = { 'Content-Type': contentType ? contentType : 'application/json' };
-    h["Accept-Language"] = "IT-IT";
     return { 'headers': extraHeaders ? { ...h, ...extraHeaders } : h };
 }
 
