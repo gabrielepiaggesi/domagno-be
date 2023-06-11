@@ -21,14 +21,14 @@ export function Delete() {
     return decorator;
 }
 
-export function Get() {
+export function Get(): any {
     const decorator: MethodDecorator = (target, propertyKey, description) => {
         Reflect.defineMetadata('METHOD', 'GET', target, propertyKey);
     };
     return decorator;
 }
 
-export function Path(path: string) {
+export function Path(path: string): any {
     const decorator: MethodDecorator = (target, propertyKey, description) => {
         Reflect.defineMetadata('PATH', path, target, propertyKey);
     };

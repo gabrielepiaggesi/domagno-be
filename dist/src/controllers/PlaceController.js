@@ -16,9 +16,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlaceController = void 0;
-const HttpMehtodDecorators_1 = require("../../utils/HttpMehtodDecorators");
 const Log_1 = require("../../utils/Log");
 const PlaceService_1 = require("../services/PlaceService");
+const HttpMehtodDecorators_1 = require("../../utils/HttpMehtodDecorators");
 const placeService = new PlaceService_1.PlaceService();
 class PlaceController {
     getNearByRestaurants(res, req) {

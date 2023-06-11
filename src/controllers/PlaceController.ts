@@ -1,8 +1,8 @@
-import { Get, Path, Post } from "../../utils/HttpMehtodDecorators";
 import { LOG } from "../../utils/Log";
 import {Response} from 'express';
 import { PlaceApi } from "../apis/SmsApi";
 import { PlaceService } from "../services/PlaceService";
+import { Get, Path } from "../../utils/HttpMehtodDecorators";
 
 const placeService = new PlaceService();
 
@@ -21,4 +21,3 @@ export class PlaceController implements PlaceApi {
     }
 
 }
-
