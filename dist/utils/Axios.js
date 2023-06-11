@@ -18,7 +18,7 @@ const ServerError_1 = require("./ServerError");
 function getHeaders(contentType = 'application/json', extraHeaders = null) {
     let h = { 'Content-Type': contentType ? contentType : 'application/json' };
     h["Accept-Language"] = "IT-IT";
-    return { 'headers': extraHeaders ? Object.assign(Object.assign({}, h), extraHeaders) : h, maxContentLength: 10000000, maxBodyLength: 10000000 };
+    return { 'headers': extraHeaders ? Object.assign(Object.assign({}, h), extraHeaders) : h };
 }
 function throwError(e) {
     var _a, _b;
@@ -32,6 +32,9 @@ class Axios {
     }
     static post(endpoint, body, contentType = 'application/json', extraHeaders = null) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(endpoint);
+            console.log(extraHeaders);
+            console.log(getHeaders(contentType, extraHeaders));
             return (yield axios_1.default.post(endpoint, body, getHeaders(contentType, extraHeaders)).catch(e => throwError(e))).data;
         });
     }
