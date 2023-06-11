@@ -33,7 +33,7 @@ export class PlaceController implements PlaceApi {
     }
 
     @Post()
-    @Path("/sendPromptAndGetAnswer/maxTokens?")
+    @Path("/sendPromptAndGetAnswer/:maxTokens?")
     public async sendPromptAndGetAnswer(res: Response, req) {
         try {
             const response = await placeService.sendPromptAndGetAnswer(req.body, +req.params.maxTokens || null);

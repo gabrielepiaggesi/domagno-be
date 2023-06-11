@@ -68,7 +68,7 @@ __decorate([
 ], PlaceController.prototype, "searchCeleb", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
-    (0, HttpMehtodDecorators_1.Path)("/sendPromptAndGetAnswer/maxTokens?")
+    (0, HttpMehtodDecorators_1.Path)("/sendPromptAndGetAnswer/:maxTokens?")
 ], PlaceController.prototype, "sendPromptAndGetAnswer", null);
 exports.PlaceController = PlaceController;
 //# sourceMappingURL=PlaceController.js.map
