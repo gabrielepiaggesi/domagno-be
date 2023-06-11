@@ -2,7 +2,7 @@ import { LOG } from "../../utils/Log";
 import {Response} from 'express';
 import { PlaceApi } from "../apis/SmsApi";
 import { PlaceService } from "../services/PlaceService";
-import { Get, Path } from "../../utils/HttpMehtodDecorators";
+import { Get, Path, Post } from "../../utils/HttpMehtodDecorators";
 
 const placeService = new PlaceService();
 
@@ -17,6 +17,30 @@ export class PlaceController implements PlaceApi {
         } catch(e) {
             LOG.error(e);
             return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Place.getNearByRestaurants.Error'});
+        }
+    }
+
+    @Get()
+    @Path("/searchCeleb")
+    public async searchCeleb(res: Response, req) {
+        try {
+            const response = await placeService.searchCeleb(req.query.celebName);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Place.searchCeleb.Error'});
+        }
+    }
+
+    @Post()
+    @Path("/sendPromptAndGetAnswer/maxTokens?")
+    public async sendPromptAndGetAnswer(res: Response, req) {
+        try {
+            const response = await placeService.sendPromptAndGetAnswer(req.body, +req.params.maxTokens || null);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Place.sendPromptAndGetAnswer.Error'});
         }
     }
 

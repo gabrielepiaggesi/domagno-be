@@ -15,4 +15,18 @@ export class PlaceService implements PlaceApi {
         return await Axios.get(`https://serpapi.com/search.json?engine=google_maps&q=${encodeURI(queryString)}&ll=@${lat},${long},${21}z&type=search&api_key=ff9b7f25b03611bd201574335b3ae0334890097cf4ae1b5c9a43e60bbb7f0309`);
     }
 
+    public async searchCeleb(celebName: string) {
+        return await Axios.get(`https://api.api-ninjas.com/v1/celebrity?name=${celebName}`, null, { 'X-Api-Key': 'QuF/nePha7beqY5TUF2qpA==4LNTg4CTfZVubblr' });
+    }
+
+    public async sendPromptAndGetAnswer(messages: any[], maxTokens: number|null = null) {
+        const body: any = {
+            "model": "gpt-3.5-turbo",
+            "messages": messages,
+            "stop": "[DO]"
+        };
+        if (maxTokens) body['max_tokens'] = maxTokens;
+        return await Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer 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" });
+    }
+
 }

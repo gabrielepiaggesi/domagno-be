@@ -23,6 +23,23 @@ class PlaceService {
             return yield Axios_1.Axios.get(`https://serpapi.com/search.json?engine=google_maps&q=${encodeURI(queryString)}&ll=@${lat},${long},${21}z&type=search&api_key=ff9b7f25b03611bd201574335b3ae0334890097cf4ae1b5c9a43e60bbb7f0309`);
         });
     }
+    searchCeleb(celebName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Axios_1.Axios.get(`https://api.api-ninjas.com/v1/celebrity?name=${celebName}`, null, { 'X-Api-Key': 'QuF/nePha7beqY5TUF2qpA==4LNTg4CTfZVubblr' });
+        });
+    }
+    sendPromptAndGetAnswer(messages, maxTokens = null) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const body = {
+                "model": "gpt-3.5-turbo",
+                "messages": messages,
+                "stop": "[DO]"
+            };
+            if (maxTokens)
+                body['max_tokens'] = maxTokens;
+            return yield Axios_1.Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer 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" });
+        });
+    }
 }
 exports.PlaceService = PlaceService;
 //# sourceMappingURL=PlaceService.js.map

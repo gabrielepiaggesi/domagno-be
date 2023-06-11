@@ -33,10 +33,42 @@ class PlaceController {
             }
         });
     }
+    searchCeleb(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.searchCeleb(req.query.celebName);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.searchCeleb.Error' }));
+            }
+        });
+    }
+    sendPromptAndGetAnswer(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.sendPromptAndGetAnswer(req.body, +req.params.maxTokens || null);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.sendPromptAndGetAnswer.Error' }));
+            }
+        });
+    }
 }
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
     (0, HttpMehtodDecorators_1.Path)("/getNearByRestaurants")
 ], PlaceController.prototype, "getNearByRestaurants", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/searchCeleb")
+], PlaceController.prototype, "searchCeleb", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/sendPromptAndGetAnswer/maxTokens?")
+], PlaceController.prototype, "sendPromptAndGetAnswer", null);
 exports.PlaceController = PlaceController;
 //# sourceMappingURL=PlaceController.js.map

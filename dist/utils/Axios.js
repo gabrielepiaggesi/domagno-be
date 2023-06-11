@@ -16,7 +16,7 @@ exports.Axios = void 0;
 const axios_1 = __importDefault(require("axios"));
 const ServerError_1 = require("./ServerError");
 function getHeaders(contentType = 'application/json', extraHeaders = null) {
-    let h = { 'Content-Type': contentType };
+    let h = { 'Content-Type': contentType ? contentType : 'application/json' };
     h["Accept-Language"] = "IT-IT";
     return { 'headers': extraHeaders ? Object.assign(Object.assign({}, h), extraHeaders) : h, maxContentLength: 10000000, maxBodyLength: 10000000 };
 }
@@ -25,9 +25,9 @@ function throwError(e) {
     throw new ServerError_1.ServerError('AXIOS_ERR', (_a = e.response) === null || _a === void 0 ? void 0 : _a.statusText, (_b = e.response) === null || _b === void 0 ? void 0 : _b.status, e);
 }
 class Axios {
-    static get(endpoint, contentType = 'application/json') {
+    static get(endpoint, contentType = 'application/json', extraHeaders = null) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield axios_1.default.get(endpoint, getHeaders(contentType)).catch(e => throwError(e))).data;
+            return (yield axios_1.default.get(endpoint, getHeaders(contentType, extraHeaders)).catch(e => throwError(e))).data;
         });
     }
     static post(endpoint, body, contentType = 'application/json', extraHeaders = null) {
