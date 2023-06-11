@@ -37,7 +37,7 @@ class PlaceService {
             };
             if (maxTokens)
                 body['max_tokens'] = maxTokens;
-            return yield Axios_1.Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer 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" });
+            return yield Axios_1.Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
         });
     }
 }

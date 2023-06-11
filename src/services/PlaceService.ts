@@ -26,7 +26,7 @@ export class PlaceService implements PlaceApi {
             "stop": "[DO]"
         };
         if (maxTokens) body['max_tokens'] = maxTokens;
-        return await Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer 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" });
+        return await Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
     }
 
 }
