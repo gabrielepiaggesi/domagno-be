@@ -44,4 +44,15 @@ export class PlaceController implements PlaceApi {
         }
     }
 
+    @Post()
+    @Path("/loadBoobs")
+    public async loadBoobs(res: Response, req) {
+        try {
+            const response = await placeService.loadBoobs(req.body);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Place.loadBoobs.Error'});
+        }
+    }
 }
