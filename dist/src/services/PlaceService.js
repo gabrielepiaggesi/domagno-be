@@ -40,6 +40,11 @@ class PlaceService {
             return yield Axios_1.Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
         });
     }
+    loadBoobs(body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Axios_1.Axios.post(`https://stablediffusionapi.com/api/v3/text2img`, body, null);
+        });
+    }
 }
 exports.PlaceService = PlaceService;
 //# sourceMappingURL=PlaceService.js.map

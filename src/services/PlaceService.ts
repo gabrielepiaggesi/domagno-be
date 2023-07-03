@@ -29,7 +29,6 @@ export class PlaceService implements PlaceApi {
         return await Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
     }
 
-
     public async loadBoobs(body: any) {
         return await Axios.post(`https://stablediffusionapi.com/api/v3/text2img`, body, null);
     }

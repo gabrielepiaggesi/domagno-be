@@ -57,6 +57,18 @@ class PlaceController {
             }
         });
     }
+    loadBoobs(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.loadBoobs(req.body);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.loadBoobs.Error' }));
+            }
+        });
+    }
 }
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
@@ -70,5 +82,9 @@ __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Path)("/sendPromptAndGetAnswer/:maxTokens?")
 ], PlaceController.prototype, "sendPromptAndGetAnswer", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/loadBoobs")
+], PlaceController.prototype, "loadBoobs", null);
 exports.PlaceController = PlaceController;
 //# sourceMappingURL=PlaceController.js.map
