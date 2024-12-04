@@ -4,7 +4,7 @@
   "description": "nodejs backend for do-magno project",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
+    "start": "tsc && node ./dist/index.js",
     "mac": "tsc && export NODE_ENV=myhost && node ./dist/index.js",
     "local": "tsc && node ./dist/index.js",
     "prod": "node ./dist/index.js",

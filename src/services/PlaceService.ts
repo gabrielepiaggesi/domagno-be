@@ -21,11 +21,16 @@ export class PlaceService implements PlaceApi {
 
     public async sendPromptAndGetAnswer(messages: any[], maxTokens: number|null = null) {
         const body: any = {
-            "model": "gpt-3.5-turbo",
+            "model": "gpt-4o-mini",
             "messages": messages,
             "stop": "[DO]"
         };
         if (maxTokens) body['max_tokens'] = maxTokens;
+        return await Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
+    }
+
+    public async sendMeal(body) {
+        body.model = "gpt-4o-mini";
         return await Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
     }
 

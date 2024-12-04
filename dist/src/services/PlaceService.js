@@ -31,12 +31,18 @@ class PlaceService {
     sendPromptAndGetAnswer(messages, maxTokens = null) {
         return __awaiter(this, void 0, void 0, function* () {
             const body = {
-                "model": "gpt-3.5-turbo",
+                "model": "gpt-4o-mini",
                 "messages": messages,
                 "stop": "[DO]"
             };
             if (maxTokens)
                 body['max_tokens'] = maxTokens;
+            return yield Axios_1.Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
+        });
+    }
+    sendMeal(body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            body.model = "gpt-4o-mini";
             return yield Axios_1.Axios.post(`https://api.openai.com/v1/chat/completions`, body, null, { "Authorization": "Bearer " + process.env.OPEN_AI_KEY });
         });
     }
