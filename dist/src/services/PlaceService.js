@@ -25,7 +25,7 @@ class PlaceService {
     }
     searchCeleb(celebName) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Axios_1.Axios.get(`https://api.api-ninjas.com/v1/celebrity?name=${celebName}`, null, { 'X-Api-Key': 'QuF/nePha7beqY5TUF2qpA==4LNTg4CTfZVubblr' });
+            return yield Axios_1.Axios.get(`https://api.api-ninjas.com/v1/celebrity?name=${celebName}`, null, { 'X-Api-Key': process.env.CELEB_KEY });
         });
     }
     sendPromptAndGetAnswer(messages, maxTokens = null) {
