@@ -16,7 +16,7 @@ export class PlaceService implements PlaceApi {
     }
 
     public async searchCeleb(celebName: string) {
-        return await Axios.get(`https://api.api-ninjas.com/v1/celebrity?name=${celebName}`, null, { 'X-Api-Key': 'QuF/nePha7beqY5TUF2qpA==4LNTg4CTfZVubblr' });
+        return await Axios.get(`https://api.api-ninjas.com/v1/celebrity?name=${celebName}`, null, { 'X-Api-Key': process.env.CELEB_KEY });
     }
 
     public async sendPromptAndGetAnswer(messages: any[], maxTokens: number|null = null) {
