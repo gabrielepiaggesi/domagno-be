@@ -7,8 +7,6 @@ import { LOG } from './utils/Log';
 import config from 'config';
 
 // connectToDatabase();
-
-
 const app = express();
 const port = process.env.PORT || 8000;
 
