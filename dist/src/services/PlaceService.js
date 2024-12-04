@@ -48,7 +48,7 @@ class PlaceService {
     }
     loadBoobs(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Axios_1.Axios.post(body.url ? body.url : body.dreambooth ? `https://stablediffusionapi.com/api/v3/dreambooth` : `https://stablediffusionapi.com/api/v3/text2img`, body, null);
+            return yield Axios_1.Axios.post(body.dreambooth ? `https://stablediffusionapi.com/api/v3/dreambooth` : `https://stablediffusionapi.com/api/v3/text2img`, body, null);
         });
     }
 }

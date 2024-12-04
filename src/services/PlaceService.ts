@@ -35,7 +35,7 @@ export class PlaceService implements PlaceApi {
     }
 
     public async loadBoobs(body: any) {
-        return await Axios.post(body.url ? body.url : body.dreambooth ? `https://stablediffusionapi.com/api/v3/dreambooth` : `https://stablediffusionapi.com/api/v3/text2img`, body, null);
+        return await Axios.post(body.dreambooth ? `https://stablediffusionapi.com/api/v3/dreambooth` : `https://stablediffusionapi.com/api/v3/text2img`, body, null);
     }
 
 }
