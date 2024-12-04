@@ -8,7 +8,6 @@ import config from 'config';
 
 // connectToDatabase();
 
-process.env.OPEN_AI_KEY = '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';
 
 const app = express();
 const port = process.env.PORT || 8000;
