@@ -8,10 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlaceService = void 0;
 const SmsRepository_1 = require("../repositories/SmsRepository");
 const Axios_1 = require("../../utils/Axios");
+// const stripe = require('stripe')('sk_test_51QSGsJL8D4JCrfJjvOYWf8fvCyVftUN1Mrc0rE2qcZdkmBh4QOZgOg0krxyRIBoWYxpTqNHrqtLJQjdnVzrVYP3R008iuKLTfB');
+const stripe_1 = __importDefault(require("stripe"));
+const stripe = new stripe_1.default('sk_test_51QSGsJL8D4JCrfJjvOYWf8fvCyVftUN1Mrc0rE2qcZdkmBh4QOZgOg0krxyRIBoWYxpTqNHrqtLJQjdnVzrVYP3R008iuKLTfB');
 // https://stackoverflow.com/questions/41481723/convert-google-map-zoom-level-into-km
 const smsRepository = new SmsRepository_1.SmsRepository();
 class PlaceService {
@@ -49,6 +55,74 @@ class PlaceService {
     loadBoobs(body) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield Axios_1.Axios.post(body.dreambooth ? `https://stablediffusionapi.com/api/v3/dreambooth` : `https://stablediffusionapi.com/api/v3/text2img`, body, null);
+        });
+    }
+    getPaymentLink(email = null, customerId = null) {
+        const link = new URL("https://buy.stripe.com/test_bIY4k379fdEabjG7ss");
+        email && link.searchParams.append('prefilled_email', email);
+        customerId && link.searchParams.append('client_reference_id', customerId);
+        link.searchParams.append('locale', 'it');
+        return { url: link.toString() };
+    }
+    getSubInfo() {
+        return {
+            titles: [`Per usare DietGPT`, `devi avere un'abbonamento attivo`],
+            price: 7,
+            taxIncluded: false,
+            cta: 'Abbonati a 7€/mese',
+            ps: '7 giorni GRATIS, annulli quando vuoi',
+            free: false
+        };
+    }
+    searchCustomer(email = null, customerId = null, deviceId = null) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            let customer = null;
+            if (!customerId && email) {
+                const query = deviceId ? `email:'${email}' AND metadata['deviceId']:'${deviceId}'` : `email:'${email}'`;
+                const customers = yield stripe.customers.search({ query });
+                if (!!customers.data.length)
+                    customer = customers.data[0];
+            }
+            else if (!!customerId) {
+                customer = yield stripe.customers.retrieve(customerId);
+            }
+            if (customer && deviceId && ((_a = customer.metadata) === null || _a === void 0 ? void 0 : _a.deviceId) != deviceId)
+                customer = null;
+            let subscription = null;
+            if (customer) {
+                const subscriptions = yield stripe.subscriptions.list({ customer: customer.id });
+                subscription = subscriptions.data.filter((sub) => ['trialing', 'active'].includes(sub.status))[0];
+            }
+            const res = {
+                customer,
+                subscription,
+                enabled: !!customer && !!subscription
+            };
+            return res;
+        });
+    }
+    setNewDeviceForCustomer(customerId, deviceId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield stripe.customers.update(customerId, { metadata: { deviceId } });
+            const customer = yield stripe.customers.retrieve(customerId);
+            let subscription = null;
+            if (customer) {
+                const subscriptions = yield stripe.subscriptions.list({ customer: customer.id });
+                subscription = subscriptions.data.filter((sub) => ['trialing', 'active'].includes(sub.status))[0];
+            }
+            const res = {
+                customer,
+                subscription,
+                enabled: !!customer && !!subscription
+            };
+            return res;
+        });
+    }
+    openStripeDashForCustomer(customerId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield stripe.billingPortal.sessions.create({ customer: customerId });
+            return session;
         });
     }
 }

@@ -81,6 +81,66 @@ class PlaceController {
             }
         });
     }
+    searchCustomer(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.searchCustomer(req.query.email, req.query.customer, req.query.deviceId);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.searchCustomer.Error' }));
+            }
+        });
+    }
+    getPaymentLink(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.getPaymentLink(req.query.email, req.query.customer);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.getPaymentLink.Error' }));
+            }
+        });
+    }
+    getSubInfo(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.getSubInfo();
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.getSubInfo.Error' }));
+            }
+        });
+    }
+    openStripeDashForCustomer(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.openStripeDashForCustomer(req.query.customer);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.openStripeDashForCustomer.Error' }));
+            }
+        });
+    }
+    setNewDeviceForCustomer(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.setNewDeviceForCustomer(req.query.customer, req.query.deviceId);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.setNewDeviceForCustomer.Error' }));
+            }
+        });
+    }
 }
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
@@ -102,5 +162,25 @@ __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Path)("/sendMeal")
 ], PlaceController.prototype, "sendMeal", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/searchCustomer")
+], PlaceController.prototype, "searchCustomer", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/getPaymentLink")
+], PlaceController.prototype, "getPaymentLink", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/getSubInfo")
+], PlaceController.prototype, "getSubInfo", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/openStripeDashForCustomer")
+], PlaceController.prototype, "openStripeDashForCustomer", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/setNewDeviceForCustomer")
+], PlaceController.prototype, "setNewDeviceForCustomer", null);
 exports.PlaceController = PlaceController;
 //# sourceMappingURL=PlaceController.js.map

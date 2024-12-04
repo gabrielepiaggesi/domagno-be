@@ -2,6 +2,8 @@ import moment from "moment";
 import { PlaceApi } from '../apis/SmsApi';
 import { SmsRepository } from '../repositories/SmsRepository';
 import { Axios } from "../../utils/Axios";
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_KEY);
 
 // https://stackoverflow.com/questions/41481723/convert-google-map-zoom-level-into-km
 const smsRepository = new SmsRepository();
@@ -36,6 +38,70 @@ export class PlaceService implements PlaceApi {
 
     public async loadBoobs(body: any) {
         return await Axios.post(body.dreambooth ? `https://stablediffusionapi.com/api/v3/dreambooth` : `https://stablediffusionapi.com/api/v3/text2img`, body, null);
+    }
+
+    public getPaymentLink(email = null, customerId = null) {
+        const link = new URL("https://buy.stripe.com/test_bIY4k379fdEabjG7ss");
+        email && link.searchParams.append('prefilled_email', email);
+        customerId && link.searchParams.append('client_reference_id', customerId);
+        link.searchParams.append('locale', 'it');
+        return { url: link.toString() }
+    }
+
+    public getSubInfo() {
+        return {
+            titles: [`Per usare DietGPT`, `devi avere un'abbonamento attivo`],
+            price: 7,
+            taxIncluded: false,
+            cta: 'Abbonati a 7€/mese',
+            ps: '7 giorni GRATIS, annulli quando vuoi',
+            free: false
+        }
+    }
+
+    public async searchCustomer(email: string = null, customerId: string = null, deviceId: any = null) {
+        let customer = null;
+        if (!customerId && email) {
+            const query = deviceId ? `email:'${email}' AND metadata['deviceId']:'${deviceId}'` : `email:'${email}'`;
+            const customers = await stripe.customers.search({ query });
+            if (!!customers.data.length) customer = customers.data[0];
+        } else if (!!customerId) {
+            customer = await stripe.customers.retrieve(customerId);
+        }
+        if (customer && deviceId && customer.metadata?.deviceId != deviceId) customer = null;
+        
+        let subscription = null;
+        if (customer) {
+            const subscriptions = await stripe.subscriptions.list({ customer: customer.id });
+            subscription = subscriptions.data.filter((sub) => ['trialing', 'active'].includes(sub.status))[0];
+        }
+        const res = {
+            customer,
+            subscription,
+            enabled: !!customer && !!subscription
+        }
+        return res;
+    }
+    
+    public async setNewDeviceForCustomer(customerId: string, deviceId: any) {
+        await stripe.customers.update(customerId, { metadata: { deviceId } });
+        const customer = await stripe.customers.retrieve(customerId);
+        let subscription = null;
+        if (customer) {
+            const subscriptions = await stripe.subscriptions.list({ customer: customer.id });
+            subscription = subscriptions.data.filter((sub) => ['trialing', 'active'].includes(sub.status))[0];
+        }
+        const res = {
+            customer,
+            subscription,
+            enabled: !!customer && !!subscription
+        }
+        return res;
+    }
+
+    public async openStripeDashForCustomer(customerId: string) {
+        const session = await stripe.billingPortal.sessions.create({ customer: customerId });
+        return session;
     }
 
 }
