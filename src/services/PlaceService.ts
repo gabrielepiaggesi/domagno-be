@@ -55,7 +55,7 @@ export class PlaceService implements PlaceApi {
             taxIncluded: false,
             cta: 'Abbonati a 7€/mese',
             ps: '7 giorni GRATIS, annulli quando vuoi',
-            free: false
+            free: true
         }
     }
 

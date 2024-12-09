@@ -15,9 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlaceService = void 0;
 const SmsRepository_1 = require("../repositories/SmsRepository");
 const Axios_1 = require("../../utils/Axios");
-// const stripe = require('stripe')('sk_test_51QSGsJL8D4JCrfJjvOYWf8fvCyVftUN1Mrc0rE2qcZdkmBh4QOZgOg0krxyRIBoWYxpTqNHrqtLJQjdnVzrVYP3R008iuKLTfB');
 const stripe_1 = __importDefault(require("stripe"));
-const stripe = new stripe_1.default('sk_test_51QSGsJL8D4JCrfJjvOYWf8fvCyVftUN1Mrc0rE2qcZdkmBh4QOZgOg0krxyRIBoWYxpTqNHrqtLJQjdnVzrVYP3R008iuKLTfB');
+const stripe = new stripe_1.default(process.env.STRIPE_KEY);
 // https://stackoverflow.com/questions/41481723/convert-google-map-zoom-level-into-km
 const smsRepository = new SmsRepository_1.SmsRepository();
 class PlaceService {
@@ -71,7 +70,7 @@ class PlaceService {
             taxIncluded: false,
             cta: 'Abbonati a 7€/mese',
             ps: '7 giorni GRATIS, annulli quando vuoi',
-            free: false
+            free: true
         };
     }
     searchCustomer(email = null, customerId = null, deviceId = null) {
