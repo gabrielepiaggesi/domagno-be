@@ -41,7 +41,7 @@ export class PlaceService implements PlaceApi {
     }
 
     public getPaymentLink(email = null, customerId = null) {
-        const link = new URL("https://buy.stripe.com/test_bIY4k379fdEabjG7ss");
+        const link = new URL("https://buy.stripe.com/7sI9BM9AbbRPgRGeUU");
         email && link.searchParams.append('prefilled_email', email);
         customerId && link.searchParams.append('client_reference_id', customerId);
         link.searchParams.append('locale', 'it');
@@ -55,7 +55,7 @@ export class PlaceService implements PlaceApi {
             taxIncluded: false,
             cta: 'Abbonati a 7€/mese',
             ps: '7 giorni GRATIS, annulli quando vuoi',
-            free: true
+            free: false
         }
     }
 
