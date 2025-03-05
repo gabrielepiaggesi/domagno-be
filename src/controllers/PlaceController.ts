@@ -128,4 +128,28 @@ export class PlaceController implements PlaceApi {
         }
     }
 
+    @Get()
+    @Path("/verify/wb")
+    public async verifyWB(res: Response, req) {
+        try {
+            const response = await placeService.verifyWB(req);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Place.setNewDeviceForCustomer.Error'});
+        }
+    }
+
+    @Post()
+    @Path("/log/wb")
+    public async logWB(res: Response, req) {
+        try {
+            const response = await placeService.logWB(req.body);
+            return res.status(200).json(response);
+        } catch(e) {
+            LOG.error(e);
+            return res.status(e.status || 500).json({ ...e, message: e.message || e.msg, code: e.code || 'Place.setNewDeviceForCustomer.Error'});
+        }
+    }
+
 }

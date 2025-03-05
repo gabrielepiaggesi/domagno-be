@@ -16,7 +16,7 @@ exports.PlaceService = void 0;
 const SmsRepository_1 = require("../repositories/SmsRepository");
 const Axios_1 = require("../../utils/Axios");
 const stripe_1 = __importDefault(require("stripe"));
-const stripe = new stripe_1.default(process.env.STRIPE_KEY);
+const stripe = new stripe_1.default(process.env.STRIPE_KEY || 'wertyuiojhgfdsdfghjkl');
 // https://stackoverflow.com/questions/41481723/convert-google-map-zoom-level-into-km
 const smsRepository = new SmsRepository_1.SmsRepository();
 class PlaceService {
@@ -32,6 +32,28 @@ class PlaceService {
         return __awaiter(this, void 0, void 0, function* () {
             return yield Axios_1.Axios.get(`https://api.api-ninjas.com/v1/celebrity?name=${celebName}`, null, { 'X-Api-Key': process.env.CELEB_KEY });
         });
+    }
+    verifyWB(req) {
+        const mode = req.query['hub.mode'];
+        const token = req.query['hub.verify_token'];
+        const challenge = req.query['hub.challenge'];
+        const VERIFY_TOKEN = 'test';
+        // Check if a token and mode were sent
+        if (mode && token) {
+            // Check the mode and token
+            if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+                // Respond with the challenge token from the request
+                return challenge;
+            }
+            else {
+                // Respond with '403 Forbidden' if verify tokens do not match
+                throw new Error('403 Forbidden');
+            }
+        }
+    }
+    logWB(wb) {
+        console.log('Received webhook:', JSON.stringify(wb, null, 2));
+        return true;
     }
     sendPromptAndGetAnswer(messages, maxTokens = null) {
         return __awaiter(this, void 0, void 0, function* () {

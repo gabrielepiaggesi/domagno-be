@@ -141,6 +141,30 @@ class PlaceController {
             }
         });
     }
+    verifyWB(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.verifyWB(req);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.setNewDeviceForCustomer.Error' }));
+            }
+        });
+    }
+    logWB(res, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield placeService.logWB(req.body);
+                return res.status(200).json(response);
+            }
+            catch (e) {
+                Log_1.LOG.error(e);
+                return res.status(e.status || 500).json(Object.assign(Object.assign({}, e), { message: e.message || e.msg, code: e.code || 'Place.setNewDeviceForCustomer.Error' }));
+            }
+        });
+    }
 }
 __decorate([
     (0, HttpMehtodDecorators_1.Get)(),
@@ -182,5 +206,13 @@ __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
     (0, HttpMehtodDecorators_1.Path)("/setNewDeviceForCustomer")
 ], PlaceController.prototype, "setNewDeviceForCustomer", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Get)(),
+    (0, HttpMehtodDecorators_1.Path)("/verify/wb")
+], PlaceController.prototype, "verifyWB", null);
+__decorate([
+    (0, HttpMehtodDecorators_1.Post)(),
+    (0, HttpMehtodDecorators_1.Path)("/log/wb")
+], PlaceController.prototype, "logWB", null);
 exports.PlaceController = PlaceController;
 //# sourceMappingURL=PlaceController.js.map
