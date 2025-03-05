@@ -141,7 +141,7 @@ export class PlaceController implements PlaceApi {
     }
 
     @Post()
-    @Path("/log/wb")
+    @Path("/verify/wb")
     public async logWB(res: Response, req) {
         try {
             const response = await placeService.logWB(req.body);

@@ -212,7 +212,7 @@ __decorate([
 ], PlaceController.prototype, "verifyWB", null);
 __decorate([
     (0, HttpMehtodDecorators_1.Post)(),
-    (0, HttpMehtodDecorators_1.Path)("/log/wb")
+    (0, HttpMehtodDecorators_1.Path)("/verify/wb")
 ], PlaceController.prototype, "logWB", null);
 exports.PlaceController = PlaceController;
 //# sourceMappingURL=PlaceController.js.map
