@@ -43,7 +43,7 @@ class PlaceService {
             // Check the mode and token
             if (mode === 'subscribe' && token === VERIFY_TOKEN) {
                 // Respond with the challenge token from the request
-                return challenge;
+                return +challenge;
             }
             else {
                 // Respond with '403 Forbidden' if verify tokens do not match
